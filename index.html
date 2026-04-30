@@ -291,6 +291,10 @@ body {
 }
 .topbar.scrolled .topbar-title p { opacity:0; height:0; margin:0; overflow:hidden; }
 
+.back-btn { display:none; width:36px; height:36px; border-radius:11px; background:var(--card); border:1px solid var(--border); color:var(--text); cursor:pointer; font-size:16px; align-items:center; justify-content:center; transition:all 0.25s var(--ease); }
+.back-btn:hover { background:var(--card-hover); transform:translateY(-2px); }
+@media (max-width:768px) { .back-btn { display:flex; } }
+
 .topbar-actions { margin-left:auto; display:flex; gap:8px; align-items:center; }
 
 /* SEARCH */
@@ -1490,19 +1494,30 @@ body {
   .settings-grid { grid-template-columns:1fr; }
 }
 @media (max-width:768px) {
+  * { box-sizing:border-box; }
+  html, body { width:100%; overflow-x:hidden; }
   .sidebar { display:none; }
   .main { width:100%; max-width:100%; overflow-x:hidden; }
-  .content { padding:18px; }
-  .topbar { padding:8px 14px; }
-  .topbar-title h1 { font-size:16px; }
+  .app { width:100%; }
+  .content { padding:16px 12px; }
+  .topbar { padding:8px 10px; gap:6px; }
+  .topbar-actions { gap:4px; }
+  .topbar-title h1 { font-size:14px; }
   .topbar-title p { display:none; }
+  .search-wrap { flex:1; min-width:0; }
+  .search { width:100%; max-width:100%; }
+  .search:focus-within { width:100%; }
+  .search input { font-size:12px; }
+  .search kbd { display:none; }
+  .icon-btn { width:36px; height:36px; font-size:14px; }
+  .theme-toggle { width:48px; height:26px; }
   .hero-illustration { display:none; }
   .stats-grid { grid-template-columns:repeat(2, 1fr); }
   .categories-grid { grid-template-columns:repeat(3, 1fr); }
   .assistants-grid { grid-template-columns:repeat(2, 1fr); }
   .kanban-grid { grid-template-columns:1fr; }
-  .search { width:auto; flex:1; }
-  .search:focus-within { width:auto; }
+  .chart-svg { max-width:100%; height:auto; }
+  svg { max-width:100%; }
 }
 
 /* Scrollbar */
@@ -1596,6 +1611,7 @@ body {
 
     <!-- TOPBAR -->
     <div class="topbar" id="topbar">
+      <button class="back-btn" id="backBtn" onclick="goBack()" title="Voltar">←</button>
       <div class="topbar-title">
         <h1 id="pageTitle">Bom dia, Leonardo ☀️</h1>
         <p id="pageSubtitle">Você está em uma sequência de <strong style="color:var(--yellow);">47 dias</strong> — continue assim!</p>
@@ -2667,6 +2683,16 @@ function closeModal() { document.getElementById('modal').classList.remove('open'
 document.getElementById('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
 
 // ═════════ ROUTER ═════════
+let pageHistory = ['dashboard'];
+let currentPageIndex = 0;
+
+function goBack() {
+  if (currentPageIndex > 0) {
+    currentPageIndex--;
+    navigate(pageHistory[currentPageIndex]);
+  }
+}
+
 const PAGE_TITLES = {
   dashboard: { title:'Bom dia, Leonardo ☀️', subtitle:'Você está em uma sequência de <strong style="color:var(--yellow);">47 dias</strong> — continue assim!' },
   categorias: { title:'🎯 Categorias', subtitle:'42 categorias divididas em 4 pilares' },
@@ -2681,6 +2707,13 @@ const PAGE_TITLES = {
 };
 
 function navigate(page) {
+  // Gerenciar histórico
+  if (pageHistory[currentPageIndex] !== page) {
+    pageHistory = pageHistory.slice(0, currentPageIndex + 1);
+    pageHistory.push(page);
+    currentPageIndex++;
+  }
+
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
