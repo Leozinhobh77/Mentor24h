@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getCurrentUser } from '@/lib/services/auth.service';
+import { getUserFromToken } from '@/lib/services/auth.service';
 
 /**
  * GET /api/auth/me
@@ -8,23 +8,27 @@ import { getCurrentUser } from '@/lib/services/auth.service';
  */
 export async function GET(request: NextRequest) {
   try {
-    const result = await getCurrentUser();
+    const authHeader = request.headers.get('authorization');
+    const token = authHeader?.split(' ')[1];
+
+    if (!token) {
+      return NextResponse.json(
+        { success: false, error: 'Missing authorization token' },
+        { status: 401 }
+      );
+    }
+
+    const result = await getUserFromToken(token);
 
     if (!result.success) {
       return NextResponse.json(
-        {
-          success: false,
-          error: result.error,
-        },
+        { success: false, error: result.error },
         { status: 401 }
       );
     }
 
     return NextResponse.json(
-      {
-        success: true,
-        data: result.data,
-      },
+      { success: true, data: result.data },
       { status: 200 }
     );
   } catch (error) {
@@ -32,10 +36,7 @@ export async function GET(request: NextRequest) {
     console.error('[GET ME ERROR]', message);
 
     return NextResponse.json(
-      {
-        success: false,
-        error: message,
-      },
+      { success: false, error: message },
       { status: 500 }
     );
   }

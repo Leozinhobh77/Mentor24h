@@ -1,35 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { logout } from '@/lib/services/auth.service';
+import { createSupabaseWithToken } from '@/lib/utils/supabase';
 
 export async function POST(request: NextRequest) {
   try {
-    const result = await logout();
+    const authHeader = request.headers.get('authorization');
+    const token = authHeader?.split(' ')[1];
 
-    if (!result.success) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: result.error,
-        },
-        { status: 400 }
-      );
+    if (token) {
+      const supabase = createSupabaseWithToken(token);
+      await supabase.auth.signOut({ scope: 'local' });
     }
 
-    return NextResponse.json(
-      {
-        success: true,
-      },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Erro desconhecido';
     console.error('[LOGOUT ERROR]', message);
 
     return NextResponse.json(
-      {
-        success: false,
-        error: message,
-      },
+      { success: false, error: message },
       { status: 500 }
     );
   }

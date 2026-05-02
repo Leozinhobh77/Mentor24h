@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
+import { Alert } from '../Alert';
 
 const loginSchema = z.object({
   email: z.string().email('Email inválido'),
@@ -16,8 +17,10 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const isRegistered = searchParams.get('registered') === 'true';
 
   const {
     register,
@@ -58,6 +61,11 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md space-y-6">
+      {/* Success Message */}
+      {isRegistered && (
+        <Alert type="success" title="Conta criada com sucesso!" description="Você pode fazer login agora com seus dados" />
+      )}
+
       {/* Title */}
       <div className="text-center">
         <h1 className="text-3xl font-bold text-white mb-2">Bem-vindo de volta</h1>

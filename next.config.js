@@ -1,13 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {
-    disableStaticImages: false,
-  },
-  env: {
-    // Variáveis públicas (NEXT_PUBLIC_*) serão incluídas no bundle
-    // Variáveis privadas vêm de .env.local
-  },
   headers: async () => {
     return [
       {

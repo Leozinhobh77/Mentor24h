@@ -26,6 +26,16 @@ export const supabaseServerClient =
     },
   });
 
+export function createSupabaseWithToken(accessToken: string) {
+  return createClient(supabaseUrl!, supabaseAnonKey!, {
+    global: {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    },
+  });
+}
+
 export async function getCurrentUser() {
   const {
     data: { user },

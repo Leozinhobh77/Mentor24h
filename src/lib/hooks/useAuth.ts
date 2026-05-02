@@ -23,6 +23,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
 }
 
 export function useAuth(): AuthContextType {
@@ -145,6 +146,26 @@ export function useAuth(): AuthContextType {
     }
   }, [getToken, removeToken]);
 
+  // Solicitar reset de senha
+  const resetPassword = useCallback(async (email: string) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/auth/reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.error || 'Erro ao solicitar reset de senha');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   // Executar ao montar o component
   useEffect(() => {
     refreshUser();
@@ -157,5 +178,6 @@ export function useAuth(): AuthContextType {
     login,
     logout,
     refreshUser,
+    resetPassword,
   };
 }

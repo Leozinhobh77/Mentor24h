@@ -162,7 +162,7 @@ export async function logout(): Promise<AuthResponse> {
 }
 
 /**
- * Get current authenticated user
+ * Get current authenticated user (client-side)
  */
 export async function getCurrentUser(): Promise<AuthResponse> {
   try {
@@ -198,6 +198,54 @@ export async function getCurrentUser(): Promise<AuthResponse> {
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
+    return {
+      success: false,
+      error: message,
+    };
+  }
+}
+
+/**
+ * Get user from access token (server-side)
+ */
+export async function getUserFromToken(accessToken: string): Promise<AuthResponse> {
+  try {
+    // Import here to avoid circular dependency
+    const { createSupabaseWithToken } = await import('../utils/supabase');
+
+    const supabase = createSupabaseWithToken(accessToken);
+    const {
+      data: { user: authUser },
+    } = await supabase.auth.getUser();
+
+    if (!authUser) {
+      return {
+        success: false,
+        error: 'Invalid token',
+      };
+    }
+
+    // Get user record from database
+    const [dbUser] = await db
+      .select()
+      .from(users)
+      .where(eq(users.supabaseId, authUser.id));
+
+    if (!dbUser) {
+      return {
+        success: false,
+        error: 'User not found in database',
+      };
+    }
+
+    return {
+      success: true,
+      data: {
+        user: dbUser,
+      },
+    };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Invalid token';
     return {
       success: false,
       error: message,
@@ -400,6 +448,62 @@ export async function sendVerificationEmail(): Promise<AuthResponse> {
 
     // Supabase handles verification email automatically on signup
     // This is a placeholder for future use
+
+    return { success: true };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return {
+      success: false,
+      error: message,
+    };
+  }
+}
+
+/**
+ * Send password reset email
+ * Generates reset link and sends to user email
+ */
+export async function resetPassword(email: string): Promise<AuthResponse> {
+  try {
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+      redirectTo: `${appUrl}/auth/reset/confirm`,
+    });
+
+    if (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+
+    return { success: true };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return {
+      success: false,
+      error: message,
+    };
+  }
+}
+
+/**
+ * Update password with recovery token
+ * Called after user clicks recovery email link
+ */
+export async function updatePasswordWithToken(newPassword: string): Promise<AuthResponse> {
+  try {
+    const { data, error } = await supabaseClient.auth.updateUser({
+      password: newPassword,
+    });
+
+    if (error || !data.user) {
+      return {
+        success: false,
+        error: error?.message || 'Erro ao atualizar senha',
+      };
+    }
 
     return { success: true };
   } catch (error) {

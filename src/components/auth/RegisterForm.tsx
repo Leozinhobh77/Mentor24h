@@ -13,12 +13,27 @@ const registerSchema = z.object({
   password: z.string().min(8, 'Senha deve ter no mínimo 8 caracteres'),
   confirmPassword: z.string(),
   whatsappNumber: z.string().optional(),
+  consentGiven: z.literal(true, {
+    errorMap: () => ({ message: 'Você precisa aceitar os termos' }),
+  }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Senhas não correspondem",
   path: ["confirmPassword"],
 });
 
 type RegisterFormData = z.infer<typeof registerSchema>;
+
+function calculatePasswordStrength(password: string): { score: number; level: 'fraca' | 'média' | 'forte' } {
+  let score = 0;
+  if (password.length >= 8) score++;
+  if (/[A-Z]/.test(password)) score++;
+  if (/\d/.test(password)) score++;
+  if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score++;
+
+  if (score <= 1) return { score, level: 'fraca' };
+  if (score <= 2) return { score, level: 'média' };
+  return { score, level: 'forte' };
+}
 
 export function RegisterForm() {
   const router = useRouter();
@@ -28,10 +43,14 @@ export function RegisterForm() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
   });
+
+  const passwordValue = watch('password');
+  const { score, level } = calculatePasswordStrength(passwordValue || '');
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
@@ -132,6 +151,35 @@ export function RegisterForm() {
             errors.password ? 'border-red-500' : 'border-slate-700'
           } text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all`}
         />
+        {passwordValue && (
+          <div className="mt-2 space-y-1">
+            <div className="flex gap-1">
+              {[...Array(4)].map((_, i) => (
+                <div
+                  key={i}
+                  className={`flex-1 h-1 rounded-full ${
+                    i < score
+                      ? level === 'fraca'
+                        ? 'bg-red-500'
+                        : level === 'média'
+                          ? 'bg-yellow-500'
+                          : 'bg-green-500'
+                      : 'bg-slate-700'
+                  }`}
+                />
+              ))}
+            </div>
+            <p className={`text-xs font-medium ${
+              level === 'fraca'
+                ? 'text-red-400'
+                : level === 'média'
+                  ? 'text-yellow-400'
+                  : 'text-green-400'
+            }`}>
+              Força: {level}
+            </p>
+          </div>
+        )}
         {errors.password && (
           <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>
         )}
@@ -169,6 +217,29 @@ export function RegisterForm() {
           className="w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
         />
       </div>
+
+      {/* LGPD Consent */}
+      <div className="flex items-start gap-3">
+        <input
+          id="consentGiven"
+          type="checkbox"
+          {...register('consentGiven')}
+          className="w-5 h-5 mt-1 rounded bg-slate-800 border border-slate-700 text-purple-500 focus:ring-2 focus:ring-purple-500 cursor-pointer"
+        />
+        <label htmlFor="consentGiven" className="text-sm text-gray-300 cursor-pointer flex-1">
+          Concordo com os{' '}
+          <a href="#" className="text-purple-400 hover:text-purple-300 font-medium">
+            Termos de Uso
+          </a>
+          {' '}e{' '}
+          <a href="#" className="text-purple-400 hover:text-purple-300 font-medium">
+            Política de Privacidade
+          </a>
+        </label>
+      </div>
+      {errors.consentGiven && (
+        <p className="text-red-400 text-sm -mt-2">{errors.consentGiven.message}</p>
+      )}
 
       {/* Register Button */}
       <button
