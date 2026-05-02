@@ -45,6 +45,17 @@ const events = {
       version: { type: 'number' } as const,
     },
   },
+  'whatsapp.message.failed': {
+    data: {
+      userId: { type: 'number' } as const,
+      whatsappMessageId: { type: 'string' } as const,
+      fromNumber: { type: 'string' } as const,
+      content: { type: 'string' } as const,
+      errorMessage: { type: 'string' } as const,
+      failedAt: { type: 'string' } as const,
+      retryCount: { type: 'number' } as const,
+    },
+  },
 };
 
 type Events = EventSchemas<typeof events>;
@@ -105,6 +116,19 @@ export type UserConsentGivenEvent = {
     consentType: 'marketing' | 'data_processing' | 'health_data';
     consentDate: string;
     version: number;
+  };
+};
+
+export type WhatsappMessageFailedEvent = {
+  name: 'whatsapp.message.failed';
+  data: {
+    userId: number;
+    whatsappMessageId: string;
+    fromNumber: string;
+    content: string;
+    errorMessage: string;
+    failedAt: string;
+    retryCount: number;
   };
 };
 
@@ -193,6 +217,32 @@ export async function sendUserConsentGivenEvent(
   } catch (error) {
     console.error('[INNGEST] Failed to send consent event:', error);
     throw new Error('Failed to log user consent');
+  }
+}
+
+/**
+ * Helper to send WhatsApp message failed event (dead letter queue)
+ */
+export async function sendWhatsappMessageFailedEvent(
+  data: WhatsappMessageFailedEvent['data']
+): Promise<{ ids: string[] } | null> {
+  try {
+    const result = await inngest.send({
+      name: 'whatsapp.message.failed',
+      data,
+    });
+
+    console.log('[INNGEST] Failed message event queued:', {
+      eventName: 'whatsapp.message.failed',
+      messageId: data.whatsappMessageId,
+      userId: data.userId,
+      errorMessage: data.errorMessage,
+    });
+
+    return result;
+  } catch (error) {
+    console.error('[INNGEST] Failed to queue message failed event:', error);
+    throw new Error('Failed to queue message failure handling');
   }
 }
 

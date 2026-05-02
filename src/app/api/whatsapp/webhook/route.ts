@@ -3,7 +3,7 @@ import { z } from 'zod';
 import twilio from 'twilio';
 import { db } from '@/lib/db';
 import { users, messages } from '@/lib/db/schema';
-import { inngest, whatsappMessageReceivedEvent } from '@/lib/inngest';
+import { inngest, sendWhatsappMessageReceivedEvent, sendWhatsappMessageFailedEvent } from '@/lib/inngest';
 import { eq } from 'drizzle-orm';
 
 const twilioWebhookSchema = z.object({
@@ -16,26 +16,6 @@ const twilioWebhookSchema = z.object({
 });
 
 type TwilioWebhookPayload = z.infer<typeof twilioWebhookSchema>;
-
-async function validateTwilioSignature(
-  request: NextRequest,
-  twilioAuthToken: string
-): Promise<boolean> {
-  const signature = request.headers.get('x-twilio-signature');
-  if (!signature) return false;
-
-  const url = new URL(request.url).toString().split('?')[0];
-  const body = new URLSearchParams(await request.text());
-
-  const isValid = twilio.validateRequest(
-    twilioAuthToken,
-    signature,
-    url,
-    body as any
-  );
-
-  return isValid;
-}
 
 async function findOrCreateUser(whatsappNumber: string) {
   const normalizedNumber = whatsappNumber.replace('whatsapp:', '');
@@ -93,34 +73,49 @@ export async function POST(request: NextRequest) {
     if (!twilioAuthToken || !inngestKey) {
       console.error('[WEBHOOK ERROR] Missing Twilio or Inngest credentials');
       return NextResponse.json(
-        { error: 'Configuration error' },
-        { status: 500 }
+        { error: 'Configuration error', status: 'error' },
+        { status: 200 }
       );
     }
 
-    // Valida assinatura Twilio
-    const isValidSignature = await validateTwilioSignature(
-      request,
-      twilioAuthToken
+    // Read body once (Twilio sends form-encoded, not JSON)
+    const rawBody = await request.text();
+    const formData = Object.fromEntries(new URLSearchParams(rawBody));
+
+    // Validate Twilio signature using the raw form body
+    const signature = request.headers.get('x-twilio-signature');
+    if (!signature) {
+      console.warn('[WEBHOOK SECURITY] Missing Twilio signature');
+      return NextResponse.json(
+        { error: 'Missing signature', status: 'error' },
+        { status: 200 }
+      );
+    }
+
+    const url = new URL(request.url).toString().split('?')[0];
+    const isValidSignature = twilio.validateRequest(
+      twilioAuthToken,
+      signature,
+      url,
+      formData as any
     );
 
     if (!isValidSignature) {
       console.warn('[WEBHOOK SECURITY] Invalid Twilio signature');
       return NextResponse.json(
-        { error: 'Invalid signature' },
-        { status: 403 }
+        { error: 'Invalid signature', status: 'error' },
+        { status: 200 }
       );
     }
 
-    // Parseia payload
-    const body = await request.json();
-    const validation = twilioWebhookSchema.safeParse(body);
+    // Parse and validate payload
+    const validation = twilioWebhookSchema.safeParse(formData);
 
     if (!validation.success) {
       console.error('[WEBHOOK VALIDATION ERROR]', validation.error.errors);
       return NextResponse.json(
-        { error: 'Invalid payload' },
-        { status: 400 }
+        { error: 'Invalid payload', status: 'error' },
+        { status: 200 }
       );
     }
 
@@ -133,10 +128,10 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     });
 
-    // Encontra ou cria usuário
+    // Find or create user
     const user = await findOrCreateUser(payload.From);
 
-    // Log auditado na database
+    // Audit log in database
     await logWebhookAudit(
       user.id,
       payload.MessageSid,
@@ -144,9 +139,9 @@ export async function POST(request: NextRequest) {
       'received'
     );
 
-    // Enfileira evento Inngest
+    // Queue Inngest event
     const eventPayload = {
-      userId: user.id.toString(),
+      userId: user.id,
       whatsappMessageId: payload.MessageSid,
       fromNumber: payload.From.replace('whatsapp:', ''),
       content: payload.Body,
@@ -154,9 +149,7 @@ export async function POST(request: NextRequest) {
       timestamp: Date.now(),
     };
 
-    await inngest.send(
-      whatsappMessageReceivedEvent.create(eventPayload)
-    );
+    await sendWhatsappMessageReceivedEvent(eventPayload);
 
     console.log('[WEBHOOK QUEUED]', {
       messageSid: payload.MessageSid,
@@ -176,9 +169,10 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     });
 
+    // Always return 200 to Twilio so it doesn't retry on internal errors
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { status: 'error', message: 'Internal processing error' },
+      { status: 200 }
     );
   }
 }
