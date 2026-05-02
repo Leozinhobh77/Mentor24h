@@ -111,12 +111,12 @@ printf 'window.__FORGE_DATA__ = ' > forge-data.js && cat forge-data.json >> forg
 ## Estado Atual
 
 - **Etapa Ativa:** EXECUÇÃO (Sprint 3)
-- **Sprint Atual:** 3 de 4 (Profile, Settings, Twilio Real & Integration)
+- **Sprint Atual:** 3 de 4 (Auth, Profile/Settings, Twilio Real, Categorias)
 - **Progresso:** 
   - Sprint 1 ✅ 100% completo (20/20 tasks)
   - Sprint 2 ✅ 100% completo (35/35 tasks)
-  - Sprint 3 ✅ 15/70 tasks (TASK-056→070 ✅ BLOCO 1+2+3 100% | TASK-071→ BLOCO 4 Categorias & Rotinas)
-- **Próximo Passo:** TASK-071 (Categorias + Seeding)
+  - Sprint 3 ✅ 20/70 tasks (TASK-056→075 ✅ BLOCO 1+2+3+4 100% | TASK-076→ BLOCO 5 Rotinas)
+- **Próximo Passo:** TASK-076 (Rotinas + Inngest)
 - **Bloqueadores:** Nenhum
 - **Divergências:** Nenhuma
 - **Erros:** Nenhum
@@ -214,6 +214,39 @@ printf 'window.__FORGE_DATA__ = ' > forge-data.js && cat forge-data.json >> forg
 - ✅ Support ambas `TWILIO_PHONE_NUMBER` e `TWILIO_WHATSAPP_NUMBER` (compatibility)
 - ✅ Documentação: `docs/TASKS-066-070-BLOCO3-SUMMARY.md`
 
+**BLOCO 4 (Sprint 3) — Categorias + Seeding ✅:**
+
+**TASK-071 ✅ CONCLUÍDA:**
+- ✅ Script seed-categories.ts pronto (delega para src/lib/db/seed.ts)
+- ✅ 42 categorias em 4 pilares (12 org, 10 inspiration, 10 entertainment, 10 wellbeing)
+
+**TASK-072 ✅ CONCLUÍDA:**
+- ✅ `GET /api/categories` endpoint com Bearer token
+- ✅ Retorna 42 categorias agrupadas por pilar
+- ✅ Inclui `isSelected: boolean` por usuário (onde deletedAt IS NULL)
+- ✅ Meta: { total, selected }
+
+**TASK-073 ✅ CONCLUÍDA:**
+- ✅ `POST /api/user/categories/[id]/toggle` endpoint
+- ✅ Soft delete pattern: INSERT/UPDATE/REACTIVATE com deletedAt
+- ✅ Retorna { categoryId, isSelected }
+
+**TASK-074 ✅ CONCLUÍDA:**
+- ✅ `/dashboard/categories/layout.tsx` (Server Component)
+- ✅ `/dashboard/categories/page.tsx` (Server wrapper)
+- ✅ `CategoriesPage.tsx` Client Component (318 linhas)
+- ✅ 4 seções coloridas (blue/amber/pink/green por pilar)
+- ✅ Grid responsivo (1/2/3 colunas mobile/tablet/desktop)
+- ✅ Optimistic update com reverter se erro
+- ✅ Contador "X de Y selecionadas"
+
+**TASK-075 ✅ CONCLUÍDA:**
+- ✅ `src/data/audios.json` criado com estrutura (5 áudios de exemplo)
+- ✅ `GET /api/audios` endpoint com paginação
+- ✅ Suporte a filtros: ?limit=50&offset=0
+
+**Documentação BLOCO 4:** `docs/TASKS-071-075-BLOCO4-SUMMARY.md`
+
 **Sprint 2 — WhatsApp & Crisis Detection (35 tasks COMPLETAS) ✅:**
 
 - ✅ TASK-021→025: Webhook, DB Schema, Message Service, Phone Helpers, Inngest
@@ -233,9 +266,10 @@ printf 'window.__FORGE_DATA__ = ' > forge-data.js && cat forge-data.json >> forg
 - ✅ BLOCO 1 (5/5): Reg, Login, Reset, useAuth, Middleware → 100%
 - ✅ BLOCO 2 (5/5): Alert Fixes, Middleware Sec, Dashboard, Perfil, Settings → 100%
 - ✅ BLOCO 3 (5/5): Twilio Real, Phone Verify, Health Check, Setup Guide, Webhook Fixes → 100%
-- ⏳ BLOCO 4-7 (?/?): Categorias, Rotinas, Deploy, Testing → Próximo
+- ✅ BLOCO 4 (5/5): GET Categories, Toggle Categories, Categories Page, Seed Audios, GET Audios → 100%
+- ⏳ BLOCO 5-7 (?/?): Rotinas, Deploy, Testing → Próximo
 
-**Total Sprint 3:** 15/70 tasks (21% - 3 blocos completos)
+**Total Sprint 3:** 20/70 tasks (29% - 4 blocos completos)
 
 ---
 

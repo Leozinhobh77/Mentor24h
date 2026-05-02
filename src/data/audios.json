@@ -1,0 +1,42 @@
+[
+  {
+    "id": "audio-001",
+    "title": "Meditação Guiada 10 minutos",
+    "category": "Meditação",
+    "duration": 600,
+    "instructor": "Especialista",
+    "audioUrl": "https://placeholder.audio/meditation-10min.mp3"
+  },
+  {
+    "id": "audio-002",
+    "title": "Técnica de Respiração 4-7-8",
+    "category": "Respiração",
+    "duration": 480,
+    "instructor": "Coach",
+    "audioUrl": "https://placeholder.audio/breathing-478.mp3"
+  },
+  {
+    "id": "audio-003",
+    "title": "Yoga Matinal 20 minutos",
+    "category": "Meditação",
+    "duration": 1200,
+    "instructor": "Instrutor",
+    "audioUrl": "https://placeholder.audio/yoga-morning.mp3"
+  },
+  {
+    "id": "audio-004",
+    "title": "Relaxamento Profundo",
+    "category": "Meditação",
+    "duration": 900,
+    "instructor": "Terapeuta",
+    "audioUrl": "https://placeholder.audio/relaxation.mp3"
+  },
+  {
+    "id": "audio-005",
+    "title": "Mindfulness para Iniciantes",
+    "category": "Meditação",
+    "duration": 720,
+    "instructor": "Mestre",
+    "audioUrl": "https://placeholder.audio/mindfulness-begin.mp3"
+  }
+]
