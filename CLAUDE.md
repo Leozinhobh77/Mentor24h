@@ -110,13 +110,18 @@ printf 'window.__FORGE_DATA__ = ' > forge-data.js && cat forge-data.json >> forg
 
 ## Estado Atual
 
-- **Etapa Ativa:** EXECUÇÃO (Sprint 2)
-- **Sprint Atual:** 2 de 4 (WhatsApp Integration & Crisis)
-- **Progresso:** Sprint 1 ✅ 100% completo (20/20 tasks) | Sprint 2 ⏳ 9/35 tasks (TASK-021→030 ✅ 100% BLOCO 1 + BLOCO 2 + TASK-031 ✅ INICIADO BLOCO 3)
-- **Próximo Passo:** TASK-032 (Inngest Workflow)
+- **Etapa Ativa:** EXECUÇÃO (Sprint 3)
+- **Sprint Atual:** 3 de 4 (Profile, Settings & WhatsApp Integration)
+- **Progresso:** 
+  - Sprint 1 ✅ 100% completo (20/20 tasks)
+  - Sprint 2 ✅ 100% completo (35/35 tasks)
+  - Sprint 3 ⏳ 10/70 tasks (TASK-056→065 ✅ BLOCO 1+2 100% | TASK-066→ BLOCO 3 WhatsApp Integration)
+- **Próximo Passo:** TASK-066 (WhatsApp Webhook Integration)
 - **Bloqueadores:** Nenhum
 - **Divergências:** Nenhuma
-- **Erros:** Jest config issue (Babel/TypeScript) — código validado manualmente ✅
+- **Erros:** Nenhum
+
+**BLOCO 3 (Sprint 2) — Crisis Detection & Response ✅:**
 
 **TASK-031 ✅ CONCLUÍDA:**
 - ✅ Twilio Service: `src/lib/services/twilio-service.ts` (retry 3x + exponential backoff)
@@ -130,90 +135,71 @@ printf 'window.__FORGE_DATA__ = ' > forge-data.js && cat forge-data.json >> forg
 - ✅ Documentação: `docs/TASK-031-SUMMARY.md` (Best Practices 2026)
 - ✅ Performance: < 2s por mensagem (mesmo com retries), batch 10 msgs < 20s
 
-**TASK-030 ✅ CONCLUÍDA:**
-- ✅ Crisis Flagging Service: `src/lib/services/crisis-flagging.ts` (UPDATE < 50ms)
-- ✅ flagCrisisInDB() e unflagCrisisInDB() com Drizzle ORM
-- ✅ Índices otimizados: idx_messages_user_id, PRIMARY KEY(id)
-- ✅ Validação Zod com mensagens de erro específicas
-- ✅ Performance logging: alerta se > 50ms
-- ✅ Testes: `tests/crisis-flagging.test.ts` (28+ casos)
-- ✅ Documentação: `docs/TASK-030-SUMMARY.md`
+**BLOCO 1+2 (Sprint 3) — Auth System + Profile/Settings ✅:**
 
-**TASK-029 ✅ CONCLUÍDA:**
-- ✅ Response Router Service: `src/lib/services/response-router.ts` (4 templates + 7 helpers)
-- ✅ Severity mapping: critical → high → medium → none
-- ✅ Emergency resources: CVV 188, SAMU 192, Polícia 190, UPA, Posto Saúde
-- ✅ Zero latency: lookup puro (< 1ms per request)
-- ✅ Hybrid care model: bot + human escalation
-- ✅ Testes: `tests/response-router.test.ts` (28 casos)
-- ✅ Documentação: `docs/TASK-029-SUMMARY.md` (Best Practices 2026)
+**TASK-056-060 ✅ CONCLUÍDA (BLOCO 1):**
+- ✅ Authentication system completo (register, login, password reset)
+- ✅ useAuth hook com state management
+- ✅ Protected routes + middleware security
+- ✅ Email validation com regex + Zod
+- ✅ Documentação: `docs/TASKS-057-060-SUMMARY.md`
 
-**TASK-028 ✅ CONCLUÍDA:**
-- ✅ SeverityBadge Component: `src/components/SeverityBadge.tsx` (4 variantes + showcase)
-- ✅ 4 variantes: critical (🚨 red), high (⚠️ orange), medium (⚡ yellow), none (✓ gray)
-- ✅ Responsive: 3 tamanhos (sm, md, lg) + Tailwind CSS
-- ✅ Acessibilidade: ARIA labels + role="status"
-- ✅ Testes: `tests/SeverityBadge.test.tsx` (28 casos)
-- ✅ Documentação: `docs/TASK-028-SUMMARY.md`
+**TASK-061 ✅ CONCLUÍDA — Fix Alert Props:**
+- ✅ LoginForm.tsx: 1 ocorrência `description` → `message`
+- ✅ ResetForm.tsx: 2 ocorrências `description` → `message`
+- ✅ UpdatePasswordForm.tsx: 3 ocorrências `description` → `message`
 
-**TASK-027 ✅ CONCLUÍDA:**
-- ✅ Crisis Detector: `src/lib/services/crisis-detector.ts` (pattern matching + scoring)
-- ✅ Algoritmo: normalização, pattern matching, scoring (max+avg), recomendações
-- ✅ Testes: `tests/crisis-detector.test.ts` (42 casos: 5 positivos + 5 negativos + 32 edge cases)
-- ✅ Zero false positives: 15 contextos seguros verificados
-- ✅ Documentação: `docs/TASK-027-SUMMARY.md`
+**TASK-062 ✅ CONCLUÍDA — Fix Middleware Security:**
+- ✅ Middleware.ts: `getSession()` → `getUser()` (server validation)
+- ✅ Adicionar `/auth/reset` às rotas públicas
+- ✅ Atualizar lógica de proteção para usar `user` em vez de `session`
 
-**TASK-026 ✅ CONCLUÍDA:**
-- ✅ Keywords JSON: `src/data/crisis-keywords.json` (58 termos em 7 categorias)
-- ✅ Validação e estatísticas inclusos
+**TASK-063 ✅ CONCLUÍDA — Fix Dashboard Duplication:**
+- ✅ Dashboard.tsx: Remover header duplicado
+- ✅ DashboardNavbar.tsx: Adicionar user info + logout button
+- ✅ useAuth hook integrado no navbar
 
-**TASK-021 ✅ CONCLUÍDA:**
-- ✅ Webhook handler: `src/app/api/whatsapp/webhook/route.ts`
-- ✅ Inngest client: `src/lib/inngest.ts`
-- ✅ Documentação: `docs/API-WEBHOOK.md`
-- ✅ Testes: `tests/whatsapp-webhook.test.ts`
+**TASK-064 ✅ CONCLUÍDA — Create Perfil Page:**
+- ✅ `src/app/perfil/layout.tsx` com ProtectedRoute + DashboardNavbar
+- ✅ `src/app/perfil/page.tsx` server wrapper
+- ✅ `src/components/profile/ProfileForm.tsx` client component com React Hook Form + Zod
+- ✅ `src/app/api/auth/profile/route.ts` PATCH endpoint (getUserFromToken + updateProfile)
+- ✅ Campos: name, preferredAssistant, timezone, whatsappNumber
+- ✅ Pre-population com dados do usuário via useAuth + useEffect
 
-**TASK-022 ✅ CONCLUÍDA:**
-- ✅ Schema expandido: `src/lib/db/schema.ts` (6 campos novos + 5 índices)
-- ✅ Migration SQL: `src/lib/db/migrations/0002_add_crisis_fields.sql`
-- ✅ RLS Policies (LGPD compliance)
-- ✅ Documentação: `docs/TASK-022-SUMMARY.md`
+**TASK-065 ✅ CONCLUÍDA — Create Configuracoes Page:**
+- ✅ `src/app/configuracoes/layout.tsx` com ProtectedRoute + DashboardNavbar
+- ✅ `src/app/configuracoes/page.tsx` server wrapper
+- ✅ `src/components/settings/SettingsPage.tsx` client component com 4 seções:
+  - Notificações: 3 toggles (resumos, alertas, novidades)
+  - Conta: Link alterar senha, botão exportar dados
+  - LGPD: Exibir consentDate formatada, links políticas
+  - Zona de Perigo: Logout button, Delete account modal com email confirmation
+- ✅ `src/app/api/auth/account/route.ts` DELETE endpoint (getUserFromToken + deleteAccount)
+- ✅ Modal com email confirmation para deletar conta
+- ✅ Delete flow: DELETE request + logout + redirect /
 
-**TASK-023 ✅ CONCLUÍDA:**
-- ✅ Message Service: `src/lib/services/message.service.ts` (9 métodos CRUD)
-- ✅ Validação Zod (createMessageSchema, updateMessageSchema, listMessageSchema)
-- ✅ Testes: `tests/message.service.test.ts` (20+ cases)
-- ✅ Documentação: `docs/TASK-023-SUMMARY.md`
+**Documentação BLOCO 2:** `docs/TASKS-061-065-BLOCO2-SUMMARY.md`
 
-**TASK-024 ✅ CONCLUÍDA:**
-- ✅ Phone Helpers: `src/lib/utils/phone.helpers.ts` (10 métodos)
-- ✅ Validação de telefone brasileiro, normalização, formatação
-- ✅ findOrCreateByPhone, updateUserPhone, isPhoneRegistered
-- ✅ Testes: `tests/phone.helpers.test.ts` (30+ cases)
-- ✅ Documentação: `docs/TASK-024-SUMMARY.md`
+**Sprint 2 — WhatsApp & Crisis Detection (35 tasks COMPLETAS) ✅:**
 
-**TASK-025 ✅ CONCLUÍDA:**
-- ✅ Inngest Client: `src/lib/inngest.ts` (4 eventos + 4 helpers)
-- ✅ whatsapp.message.received, crisis.detected, crisis.response.sent, user.consent.given
-- ✅ Helpers: sendWhatsappMessageReceivedEvent, sendCrisisDetectedEvent, etc
-- ✅ Testes: `tests/inngest.test.ts` (30+ cases)
-- ✅ Documentação: `docs/TASK-025-SUMMARY.md`
+- ✅ TASK-021→025: Webhook, DB Schema, Message Service, Phone Helpers, Inngest
+- ✅ TASK-026→030: Keywords, Crisis Detector, SeverityBadge, Response Router, Crisis Flagging  
+- ✅ TASK-031: Twilio Service (retry + exponential backoff)
+- Documentação completa em `docs/TASK-021-031-SPRINT2-SUMMARY.md`
 
-**🎉 BLOCO 1 COMPLETO (5/5 TASKS):**
-- TASK-021: Webhook ✅
-- TASK-022: DB Schema ✅
-- TASK-023: Message Service ✅
-- TASK-024: Phone Helpers ✅
-- TASK-025: Inngest Queue ✅
+**Sprint 3, BLOCO 1+2 — Auth + Profile/Settings (10 tasks COMPLETAS) ✅:**
 
-**BLOCO COMPLETION STATUS:**
-- ✅ PLAN-SPRINT2.md criado (35 tasks, 7 blocos)
-- ✅ Caminho crítico mapeado (2h40min)
-- ✅ Tasks paralelizáveis identificadas
-- ✅ BLOCO 1 (5/5): Webhook, DB Schema, Message Service, Phone Helpers, Inngest Queue → ✅ 100% CONCLUÍDO
-- ✅ BLOCO 2 (5/5): Keywords, Crisis Detector, SeverityBadge, Response Router, Crisis Flagging → ✅ 100% CONCLUÍDO
-- ⏳ BLOCO 3 (1/5): Twilio Service → ✅ CONCLUÍDO | Workflow, Send Response, Audit, Dashboard → ⏳ PENDENTE
-- ⏳ Próximo: TASK-032 (Inngest Workflow - Caminho Crítico)
+- ✅ TASK-056→060: Auth system completo (register, login, reset, useAuth hook, middleware)
+- ✅ TASK-061→065: Perfil page + Configuracoes page + bug fixes (5 issues)
+- Documentação: 
+  - `docs/TASKS-057-060-SUMMARY.md` (BLOCO 1)
+  - `docs/TASKS-061-065-BLOCO2-SUMMARY.md` (BLOCO 2)
+
+**BLOCO COMPLETION STATUS (Sprint 3):**
+- ✅ BLOCO 1 (5/5): Reg, Login, Reset, useAuth, Middleware → 100%
+- ✅ BLOCO 2 (5/5): Alert Fixes, Middleware Sec, Dashboard, Perfil, Settings → 100%
+- ⏳ BLOCO 3 (0/?): WhatsApp Integration → Próximo
 
 ---
 
