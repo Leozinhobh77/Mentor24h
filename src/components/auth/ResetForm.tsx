@@ -60,7 +60,7 @@ export function ResetForm() {
         <Alert
           type="success"
           title="Email enviado com sucesso!"
-          description="Verifique sua caixa de entrada e spam para o link de recuperação. Ele expira em 1 hora."
+          message="Verifique sua caixa de entrada e spam para o link de recuperação. Ele expira em 1 hora."
         />
         <div className="text-center">
           <Link href="/auth/login" className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
@@ -81,7 +81,7 @@ export function ResetForm() {
 
       {/* Error Message */}
       {error && (
-        <Alert type="error" title="Erro" description={error} />
+        <Alert type="error" title="Erro" message={error} />
       )}
 
       {/* Email Field */}

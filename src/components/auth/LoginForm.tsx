@@ -63,7 +63,7 @@ export function LoginForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md space-y-6">
       {/* Success Message */}
       {isRegistered && (
-        <Alert type="success" title="Conta criada com sucesso!" description="Você pode fazer login agora com seus dados" />
+        <Alert type="success" title="Conta criada com sucesso!" message="Você pode fazer login agora com seus dados" />
       )}
 
       {/* Title */}

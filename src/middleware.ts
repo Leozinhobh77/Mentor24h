@@ -29,14 +29,16 @@ export async function middleware(request: NextRequest) {
   );
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
   // Rotas públicas
   const publicRoutes = ['/', '/auth/login', '/auth/register'];
-  if (publicRoutes.includes(pathname)) {
+  const isPublicRoute = publicRoutes.includes(pathname) || pathname.startsWith('/auth/reset');
+
+  if (isPublicRoute) {
     // Se logado e tentando acessar /auth/login ou /auth/register, redireciona para dashboard
-    if (session && (pathname === '/auth/login' || pathname === '/auth/register')) {
+    if (user && (pathname === '/auth/login' || pathname === '/auth/register')) {
       return NextResponse.redirect(new URL('/dashboard', request.url));
     }
     return response;
@@ -46,7 +48,7 @@ export async function middleware(request: NextRequest) {
   const protectedRoutes = ['/dashboard', '/perfil', '/configuracoes'];
   const isProtected = protectedRoutes.some(route => pathname.startsWith(route));
 
-  if (isProtected && !session) {
+  if (isProtected && !user) {
     return NextResponse.redirect(new URL('/auth/login', request.url));
   }
 

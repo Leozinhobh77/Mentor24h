@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/lib/hooks/useAuth';
 
 /**
  * TASK-040: Navbar Badge
@@ -22,6 +23,7 @@ interface BadgeData {
 }
 
 export function DashboardNavbar() {
+  const { user, logout } = useAuth();
   const [badges, setBadges] = useState<BadgeData>({
     unreadMessages: 0,
     crisisCount: 0,
@@ -134,6 +136,20 @@ export function DashboardNavbar() {
             ) : (
               <span>✓ {badges.duration}ms</span>
             )}
+          </div>
+
+          {/* User Info & Logout */}
+          <div className="flex items-center gap-3 ml-4 border-l border-blue-500 pl-4">
+            <div className="text-right">
+              <p className="text-white text-sm font-medium">{user?.name || 'Usuário'}</p>
+              <p className="text-blue-100 text-xs">{user?.email}</p>
+            </div>
+            <button
+              onClick={() => logout()}
+              className="px-3 py-1.5 bg-blue-700 hover:bg-blue-600 text-white text-xs font-medium rounded-lg transition-colors whitespace-nowrap"
+            >
+              Sair
+            </button>
           </div>
         </div>
       </div>

@@ -83,7 +83,7 @@ export function UpdatePasswordForm() {
         <Alert
           type="error"
           title="Link expirado"
-          description="Este link de recuperação expirou. Solicite um novo email de recuperação."
+          message="Este link de recuperação expirou. Solicite um novo email de recuperação."
         />
         <div className="text-center space-y-3">
           <Link
@@ -113,7 +113,7 @@ export function UpdatePasswordForm() {
 
       {/* Error Message */}
       {error && (
-        <Alert type="error" title="Erro" description={error} />
+        <Alert type="error" title="Erro" message={error} />
       )}
 
       {/* Password Field */}
