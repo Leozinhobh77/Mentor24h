@@ -1,0 +1,38 @@
+{
+  "critical": {
+    "severity_threshold": 9,
+    "label": "🚨 CRÍTICA",
+    "color": "red-600",
+    "template": "Estou aqui com você. Respirando devagar: inspire por 4 segundos, segure por 7, expire por 8. Você é forte. CVV 188 está disponível 24/7. Sua vida importa. 💙",
+    "audio_id": "audio-crisis-critical",
+    "audio_title": "Respiração de Crise - Técnica 4-7-8",
+    "followup_message": "Você gostaria de falar com alguém? Posso ajudar com recursos de apoio.",
+    "escalate_to_human": true,
+    "send_to_emergency": true,
+    "emergency_contacts": ["CVV: 188", "SAMU: 192"]
+  },
+  "high": {
+    "severity_threshold": 7,
+    "label": "⚠️ ALTA",
+    "color": "orange-600",
+    "template": "Vejo que você está passando por um momento difícil. Você não está sozinho. Respire fundo. Às vezes, conversar com alguém ajuda. Estou aqui. Quer compartilhar o que está sentindo?",
+    "audio_id": "audio-crisis-high",
+    "audio_title": "Meditação Rápida - Acalme-se em 5min",
+    "followup_message": "Você gostaria de técnicas de relaxamento ou conversar mais?",
+    "escalate_to_human": false,
+    "send_to_emergency": false,
+    "emergency_contacts": []
+  },
+  "medium": {
+    "severity_threshold": 5,
+    "label": "⚡ MÉDIA",
+    "color": "yellow-600",
+    "template": "Percebo que algo está te preocupando. Lembre-se: desafios são oportunidades de crescimento. Que tal se focássemos em soluções práticas?",
+    "audio_id": "audio-crisis-medium",
+    "audio_title": "Motivação Diária",
+    "followup_message": "Como posso ajudá-lo a lidar com isso?",
+    "escalate_to_human": false,
+    "send_to_emergency": false,
+    "emergency_contacts": []
+  }
+}

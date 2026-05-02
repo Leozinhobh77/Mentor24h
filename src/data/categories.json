@@ -1,0 +1,296 @@
+[
+  {
+    "id": "cat-001",
+    "name": "Finanças",
+    "pillar": "organization",
+    "icon": "💰",
+    "order": 1
+  },
+  {
+    "id": "cat-002",
+    "name": "Metas",
+    "pillar": "organization",
+    "icon": "🎯",
+    "order": 2
+  },
+  {
+    "id": "cat-003",
+    "name": "Remédios",
+    "pillar": "organization",
+    "icon": "💊",
+    "order": 3
+  },
+  {
+    "id": "cat-004",
+    "name": "Agendas",
+    "pillar": "organization",
+    "icon": "📅",
+    "order": 4
+  },
+  {
+    "id": "cat-005",
+    "name": "Lembrete",
+    "pillar": "organization",
+    "icon": "⏰",
+    "order": 5
+  },
+  {
+    "id": "cat-006",
+    "name": "Inspiração Diária",
+    "pillar": "inspiration",
+    "icon": "✨",
+    "order": 6
+  },
+  {
+    "id": "cat-007",
+    "name": "Sucesso",
+    "pillar": "inspiration",
+    "icon": "🏆",
+    "order": 7
+  },
+  {
+    "id": "cat-008",
+    "name": "Carreira",
+    "pillar": "inspiration",
+    "icon": "💼",
+    "order": 8
+  },
+  {
+    "id": "cat-009",
+    "name": "Relacionamento",
+    "pillar": "inspiration",
+    "icon": "💑",
+    "order": 9
+  },
+  {
+    "id": "cat-010",
+    "name": "Crescimento Pessoal",
+    "pillar": "inspiration",
+    "icon": "🌱",
+    "order": 10
+  },
+  {
+    "id": "cat-011",
+    "name": "Humor",
+    "pillar": "entertainment",
+    "icon": "😂",
+    "order": 11
+  },
+  {
+    "id": "cat-012",
+    "name": "Piadas",
+    "pillar": "entertainment",
+    "icon": "🤣",
+    "order": 12
+  },
+  {
+    "id": "cat-013",
+    "name": "Memes",
+    "pillar": "entertainment",
+    "icon": "🎭",
+    "order": 13
+  },
+  {
+    "id": "cat-014",
+    "name": "Curiosidades",
+    "pillar": "entertainment",
+    "icon": "🤓",
+    "order": 14
+  },
+  {
+    "id": "cat-015",
+    "name": "Games",
+    "pillar": "entertainment",
+    "icon": "🎮",
+    "order": 15
+  },
+  {
+    "id": "cat-016",
+    "name": "Meditação",
+    "pillar": "wellbeing",
+    "icon": "🧘",
+    "order": 16
+  },
+  {
+    "id": "cat-017",
+    "name": "Exercício",
+    "pillar": "wellbeing",
+    "icon": "💪",
+    "order": 17
+  },
+  {
+    "id": "cat-018",
+    "name": "Sono",
+    "pillar": "wellbeing",
+    "icon": "😴",
+    "order": 18
+  },
+  {
+    "id": "cat-019",
+    "name": "Nutrição",
+    "pillar": "wellbeing",
+    "icon": "🥗",
+    "order": 19
+  },
+  {
+    "id": "cat-020",
+    "name": "Saúde Mental",
+    "pillar": "wellbeing",
+    "icon": "🧠",
+    "order": 20
+  },
+  {
+    "id": "cat-021",
+    "name": "Respiração",
+    "pillar": "wellbeing",
+    "icon": "🌬️",
+    "order": 21
+  },
+  {
+    "id": "cat-022",
+    "name": "Relaxamento",
+    "pillar": "wellbeing",
+    "icon": "☮️",
+    "order": 22
+  },
+  {
+    "id": "cat-023",
+    "name": "Produtividade",
+    "pillar": "organization",
+    "icon": "⚡",
+    "order": 23
+  },
+  {
+    "id": "cat-024",
+    "name": "Educação",
+    "pillar": "inspiration",
+    "icon": "📚",
+    "order": 24
+  },
+  {
+    "id": "cat-025",
+    "name": "Tecnologia",
+    "pillar": "inspiration",
+    "icon": "💻",
+    "order": 25
+  },
+  {
+    "id": "cat-026",
+    "name": "Hobbies",
+    "pillar": "entertainment",
+    "icon": "🎨",
+    "order": 26
+  },
+  {
+    "id": "cat-027",
+    "name": "Viagens",
+    "pillar": "entertainment",
+    "icon": "✈️",
+    "order": 27
+  },
+  {
+    "id": "cat-028",
+    "name": "Culinária",
+    "pillar": "wellbeing",
+    "icon": "👨‍🍳",
+    "order": 28
+  },
+  {
+    "id": "cat-029",
+    "name": "Família",
+    "pillar": "inspiration",
+    "icon": "👨‍👩‍👧‍👦",
+    "order": 29
+  },
+  {
+    "id": "cat-030",
+    "name": "Amizade",
+    "pillar": "inspiration",
+    "icon": "👫",
+    "order": 30
+  },
+  {
+    "id": "cat-031",
+    "name": "Espiritualidade",
+    "pillar": "wellbeing",
+    "icon": "🕯️",
+    "order": 31
+  },
+  {
+    "id": "cat-032",
+    "name": "Voluntariado",
+    "pillar": "inspiration",
+    "icon": "🤲",
+    "order": 32
+  },
+  {
+    "id": "cat-033",
+    "name": "Documentários",
+    "pillar": "entertainment",
+    "icon": "🎬",
+    "order": 33
+  },
+  {
+    "id": "cat-034",
+    "name": "Podcasts",
+    "pillar": "entertainment",
+    "icon": "🎧",
+    "order": 34
+  },
+  {
+    "id": "cat-035",
+    "name": "Leitura",
+    "pillar": "inspiration",
+    "icon": "📖",
+    "order": 35
+  },
+  {
+    "id": "cat-036",
+    "name": "Empreendedorismo",
+    "pillar": "inspiration",
+    "icon": "🚀",
+    "order": 36
+  },
+  {
+    "id": "cat-037",
+    "name": "Artes",
+    "pillar": "entertainment",
+    "icon": "🖼️",
+    "order": 37
+  },
+  {
+    "id": "cat-038",
+    "name": "Esportes",
+    "pillar": "wellbeing",
+    "icon": "⚽",
+    "order": 38
+  },
+  {
+    "id": "cat-039",
+    "name": "Pets",
+    "pillar": "entertainment",
+    "icon": "🐶",
+    "order": 39
+  },
+  {
+    "id": "cat-040",
+    "name": "Natureza",
+    "pillar": "wellbeing",
+    "icon": "🌿",
+    "order": 40
+  },
+  {
+    "id": "cat-041",
+    "name": "Crise",
+    "pillar": "wellbeing",
+    "icon": "🚨",
+    "order": 41
+  },
+  {
+    "id": "cat-042",
+    "name": "Suporte",
+    "pillar": "wellbeing",
+    "icon": "🆘",
+    "order": 42
+  }
+]

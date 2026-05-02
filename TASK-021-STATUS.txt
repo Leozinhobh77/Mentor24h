@@ -1,0 +1,78 @@
+═══════════════════════════════════════════════════════════════
+  ✅ TASK-021 — TWILIO WEBHOOK SETUP [EM PROGRESSO]
+═══════════════════════════════════════════════════════════════
+
+📍 LOCALIZAÇÃO: Sprint 2, Bloco 1 (Webhook & Message Intake)
+
+───────────────────────────────────────────────────────────────
+✅ JÁ FEITO:
+───────────────────────────────────────────────────────────────
+
+1. Criou arquivo: src/app/api/whatsapp/webhook/route.ts
+   └─ Recebe mensagens WhatsApp do Twilio
+   └─ Valida assinatura (segurança)
+   └─ Salva na database
+   └─ Enfileira no Inngest
+   └─ Retorna 200 OK
+
+2. Criou arquivo: src/lib/inngest.ts
+   └─ Cliente Inngest inicializado
+   └─ Evento WhatsApp definido
+
+3. Adicionou dependências ao package.json
+   └─ twilio@^4.10.0
+   └─ inngest@^3.14.0
+
+4. Criou documentação: docs/API-WEBHOOK.md
+   └─ Como usar o webhook
+   └─ Exemplos de teste
+   └─ Performance targets
+
+5. Criou testes: tests/whatsapp-webhook.test.ts
+   └─ Testa validações
+   └─ Testa edge cases
+
+───────────────────────────────────────────────────────────────
+⏳ AGORA EM ANDAMENTO:
+───────────────────────────────────────────────────────────────
+
+1. npm install --legacy-peer-deps
+   └─ Está baixando as bibliotecas (twilio, inngest)
+   └─ Demora: 2-5 minutos
+   └─ Status: RODANDO...
+
+───────────────────────────────────────────────────────────────
+📋 PRÓXIMOS PASSOS (automáticos):
+───────────────────────────────────────────────────────────────
+
+2. npm run type-check
+   └─ Valida se o código TypeScript tá correto
+   └─ Se passar: ✅
+   └─ Se falhar: 🔧 consertamos
+
+3. npm run build
+   └─ Compila o projeto
+   └─ Pronto para testes
+
+───────────────────────────────────────────────────────────────
+🎯 RESULTADO ESPERADO:
+───────────────────────────────────────────────────────────────
+
+✅ TASK-021 COMPLETA quando:
+   • npm install terminar com sucesso
+   • npm run type-check passar (0 erros)
+   • npm run build passar (0 erros)
+
+───────────────────────────────────────────────────────────────
+⚙️ DEPOIS DE TUDO:
+───────────────────────────────────────────────────────────────
+
+Você precisa configurar .env com:
+   • TWILIO_AUTH_TOKEN = seu token Twilio
+   • INNGEST_API_KEY = sua chave Inngest
+
+Depois: começar TASK-022 (DB Schema)
+
+═══════════════════════════════════════════════════════════════
+⏳ Aguardando npm install terminar... (2-5 minutos)
+═══════════════════════════════════════════════════════════════

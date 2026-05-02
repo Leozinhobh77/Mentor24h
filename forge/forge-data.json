@@ -1,0 +1,254 @@
+{
+  "projeto": {
+    "nome": "Mentor24h",
+    "icone": "🧠",
+    "descricao": "Ecossistema 24/7 de bem-estar via WhatsApp + Dashboard Web",
+    "pasta": "c:/Users/Usuário/Desktop/Curso Claude Code-Jhonatan de Souza/Mentor24h",
+    "criado_em": "2026-05-01T00:00:00Z",
+    "atualizado_em": "2026-05-01T14:30:00Z"
+  },
+  "dna": {
+    "o_que_e": "Sistema integrado de organização, inspiração, entretenimento e bem-estar acessível 24/7 via WhatsApp (interface principal) + Dashboard Web (visualização). Modelo 90% pattern matching + 10% IA seletivo.",
+    "para_quem": "Pessoas ocupadas (25-50 anos), mães sobrecarregadas, ansioso/depressivos que precisam estrutura, idosos que esquecem remédios, qualquer um que quer facilitar a vida (idade 8-80)",
+    "problema": "Desorganização crônica, esquecimento de tarefas recorrentes, falta de bem-estar integrado, saúde mental negligenciada",
+    "diferencial": "Tudo no WhatsApp (sem download), 42 categorias em 4 pilares, 6 assistentes com personalidade em PT-BR, detecção automática de crise, preço acessível (R$ 9,90-99), rotinas inteligentes",
+    "stack": "Frontend: Next.js/React | Backend: Node.js + Make (orquestração) | Banco: Supabase PostgreSQL | WhatsApp: Twilio API | IA: Claude API (10% seletivo) | Deploy: Vercel",
+    "atualizado_em": "2026-05-01T14:30:00Z"
+  },
+  "pipeline": {
+    "prd": {
+      "status": "completo",
+      "versao": 1,
+      "data": "2026-05-01T13:31:00Z"
+    },
+    "constitution": {
+      "status": "completo",
+      "versao": 1,
+      "data": "2026-05-01T14:30:00Z"
+    },
+    "spec": {
+      "status": "completo",
+      "versao": 1,
+      "data": "2026-05-01T15:45:00Z"
+    },
+    "plan": {
+      "status": "completo",
+      "versao": 1,
+      "data": "2026-05-01T16:30:00Z"
+    },
+    "task": {
+      "status": "em_andamento",
+      "versao": 1,
+      "data": "2026-05-01T16:30:00Z"
+    },
+    "implementacao": {
+      "status": "em_andamento",
+      "versao": 1,
+      "data": "2026-05-01T16:30:00Z"
+    }
+  },
+  "estado_atual": {
+    "etapa_ativa": "implementacao",
+    "ultima_sessao": "2026-05-01T16:30:00Z",
+    "proxima_acao": "Abra janela limpa e execute TASK-001: Setup Monorepo (Next.js + Drizzle + Supabase)",
+    "notas": "PLAN criado: 3 sprints (75 tasks). Sprint 1: Auth + Setup. Sprint 2: Messages + Crise. Sprint 3: Routines + Polish. Próximas 3 semanas de desenvolvimento."
+  },
+  "historico": [
+    {
+      "id": 1,
+      "acao": "PRD criado com pesquisa de mercado profunda",
+      "detalhe": "542 linhas: definição do produto, análise de 4 concorrentes, 7 diferenciais, 92 áudios, 42 categorias, 6 assistentes, 7 rotinas Claude, 4 pricing tiers, roadmap 4 fases, model de negócio com unit economics (96-97% margin), KPIs específicos, risk matrix, visão futura. Market research: 2.3M buscas/mês ansiedade, 1.8M depressão, 890k meditação. Modelo 90% Script + 10% IA validado.",
+      "llm_usada": "claude-opus-4-6",
+      "ide": "Claude Code",
+      "command": "/forge-prd",
+      "tentativas": 1,
+      "retrabalho": false,
+      "data": "2026-05-01T13:31:00Z",
+      "resultado": "sucesso"
+    },
+    {
+      "id": 2,
+      "acao": "CONSTITUTION criada com 22 leis invioláveis",
+      "detalhe": "LEI #1-10: Leis Fundamentais FORGE (isolamento, ordem SDD, timestamp, documentação humana, versionamento, transparência, confirmação, atômico, contexto, justificativa). LEI #11-18: Leis de Arquitetura (LGPD dados sensíveis, detecção crise pattern-matching, WhatsApp consentimento, backup automático, análise impacto, keywords authority, tom assistentes, transparência 90/10). LEI #19-22: Leis de Processo (planejamento ≠ execução, babel didático, rastreabilidade LLM, secrets in .env). Pesquisa: WhatsApp Healthcare (Fortinet, d7networks, Quad One), LGPD Brazil (ICLG, Usercentrics), AI Crisis Detection (0 de 29 chatbots sucesso, ChatGPT 51.6% under-triage). Stress test: 8/8 cenários de desastre protegidos.",
+      "llm_usada": "claude-opus-4-6",
+      "ide": "Claude Code",
+      "command": "/forge-constitution",
+      "tentativas": 1,
+      "retrabalho": false,
+      "data": "2026-05-01T14:30:00Z",
+      "resultado": "sucesso"
+    },
+    {
+      "id": 3,
+      "acao": "SPEC criada com 10 decisões técnicas aprovadas",
+      "detalhe": "1000+ linhas: Stack completa (Next.js 15, React 19, Drizzle ORM, Zustand, Shadcn/ui, Supabase PostgreSQL, Twilio WhatsApp, Inngest queue, Vercel Cron). 10 decisões técnicas com justificativa (Frontend, State, UI, CSS, Backend, DB, ORM, WhatsApp, Queue, Scheduler). 3 fluxos críticos documentados (mensagem WhatsApp → detecção crise, routine semanal, crisis audit). 6 tabelas schema com RLS e índices otimizados. 20+ REST endpoints (auth, messages, categories, audios, routines, user). Referencias criadas: ARCHITECTURE.md (trade-offs), DATABASE.md (schema completo), API.md (endpoints detalhados).",
+      "llm_usada": "claude-opus-4-6",
+      "ide": "Claude Code",
+      "command": "/forge-spec",
+      "tentativas": 1,
+      "retrabalho": false,
+      "data": "2026-05-01T15:45:00Z",
+      "resultado": "sucesso"
+    },
+    {
+      "id": 4,
+      "acao": "PLAN criado com 3 sprints e 75 tasks atômicas",
+      "detalhe": "Sprint 1 (Semana 1): 20 tasks — Auth + Setup + Deploy (TASK-001 a TASK-020). Sprint 2 (Semana 2): 30 tasks — Messages + Crisis Detection + WhatsApp (TASK-021 a TASK-050). Sprint 3 (Semana 3): 25 tasks — 7 Routines + Polish + Monitoring (TASK-051 a TASK-075). Cada task é atômica (2-4h), com DoD clara. Caminho crítico: Auth → Messages → Crisis Detection → Twilio → Routines. Estimativa: 150-200h de desenvolvimento = 3 semanas em ritmo 40-50h/semana.",
+      "llm_usada": "claude-opus-4-6",
+      "ide": "Claude Code",
+      "command": "/forge-plan",
+      "tentativas": 1,
+      "retrabalho": false,
+      "data": "2026-05-01T16:30:00Z",
+      "resultado": "sucesso"
+    }
+  ],
+  "health_score": {
+    "pontuacao": 70,
+    "itens": [
+      {
+        "item": "PRD completo",
+        "status": "ok",
+        "pontos": 20,
+        "validacao": "542 linhas, 15+ seções, market research, competitor analysis, KPIs específicos"
+      },
+      {
+        "item": "Constitution completa",
+        "status": "ok",
+        "pontos": 15,
+        "validacao": "22 leis, stress test 8/8 cenários, pesquisa de boas práticas"
+      },
+      {
+        "item": "SPEC (especificação técnica)",
+        "status": "ok",
+        "pontos": 20,
+        "validacao": "1000+ linhas, 10 decisões técnicas, 3 fluxos críticos, 6 tabelas, 20+ endpoints, references criadas"
+      },
+      {
+        "item": "PLAN (sprints e tasks)",
+        "status": "ok",
+        "pontos": 15,
+        "validacao": "3 sprints, 75 tasks atômicas, 3 semanas estimado, DoD clara"
+      },
+      {
+        "item": "Código de produção",
+        "status": "em_andamento",
+        "pontos": 0,
+        "validacao": "TASK-001 em execução"
+      }
+    ],
+    "diagnostico": "Pipeline SDD completa: PRD → Constitution → SPEC → PLAN → Código. Sistema pronto para implementação. Próximo: executar TASK-001 (Setup) em janela limpa. 3 semanas até MVP.",
+    "calculado_em": "2026-05-01T16:30:00Z"
+  },
+  "conquistas": [
+    {
+      "id": 1,
+      "titulo": "Primeiro PRD criado com excelência!",
+      "icone": "📄",
+      "descricao": "PRD.md completo com pesquisa de mercado real e análise de 4 concorrentes",
+      "desbloqueada_em": "2026-05-01T13:31:00Z"
+    },
+    {
+      "id": 2,
+      "titulo": "Constitution blindando o projeto!",
+      "icone": "🏛️",
+      "descricao": "22 leis invioláveis protegendo contra riscos de healthcare, solo development, e decisões impulsivas",
+      "desbloqueada_em": "2026-05-01T14:30:00Z"
+    },
+    {
+      "id": 3,
+      "titulo": "SPEC criada — planta de engenharia aprovada!",
+      "icone": "⚙️",
+      "descricao": "Especificação técnica completa com 10 decisões justificadas, schema de banco, e API documentada",
+      "desbloqueada_em": "2026-05-01T15:45:00Z"
+    },
+    {
+      "id": 4,
+      "titulo": "PLAN criado — roteiro de 3 semanas!",
+      "icone": "📋",
+      "descricao": "3 sprints, 75 tasks atômicas. Sprint 1: Auth. Sprint 2: Messages. Sprint 3: Routines. Hora de executar!",
+      "desbloqueada_em": "2026-05-01T16:30:00Z"
+    }
+  ],
+  "notificacoes": [
+    {
+      "id": 1,
+      "tipo": "conquista",
+      "mensagem": "📄 PRD criado! Mentor24h está bem-definido. Próximo: Constitution",
+      "acao_sugerida": "Execute /forge-constitution",
+      "lida": true,
+      "criada_em": "2026-05-01T13:31:00Z"
+    },
+    {
+      "id": 2,
+      "tipo": "conquista",
+      "mensagem": "🏛️ Constitution criada! Projeto blindado com 22 leis. Stress test: 8/8 cenários cobertos.",
+      "acao_sugerida": "Revisar Constitution.md e aprovar. Depois: /forge-spec",
+      "lida": true,
+      "criada_em": "2026-05-01T14:30:00Z"
+    },
+    {
+      "id": 3,
+      "tipo": "conquista",
+      "mensagem": "⚙️ SPEC criada! Stack completa: Next.js + Drizzle + Supabase + Twilio. 10 decisões técnicas documentadas.",
+      "acao_sugerida": "Execute /forge-plan para criar sprints e tasks",
+      "lida": true,
+      "criada_em": "2026-05-01T15:45:00Z"
+    },
+    {
+      "id": 4,
+      "tipo": "conquista",
+      "mensagem": "📋 PLAN criado! 3 sprints, 75 tasks. TASK-001 ready: Setup Monorepo. Abra janela limpa e comece!",
+      "acao_sugerida": "Abra janela nova → comece TASK-001",
+      "lida": false,
+      "criada_em": "2026-05-01T16:30:00Z"
+    }
+  ],
+  "babel": [
+    {
+      "termo": "Pattern Matching",
+      "pronuncia": "pá-tern má-tching",
+      "categoria": "programação",
+      "definicao_simples": "Forma de encontrar informações comparando padrões. Como quando você vê 'São Paulo' e sabe que é uma cidade — reconheceu o padrão.",
+      "definicao_tecnica": "Reconhecimento de sequências de caracteres usando regex ou keywords list. Determinístico (sempre mesmo resultado), rápido, confiável.",
+      "exemplo_real": "Mentor24h detecta crise quando vê palavras como 'suicídio', 'não aguento mais' — pattern matching puro, sem IA",
+      "adicionado_por": "forge-constitution",
+      "adicionado_em": "2026-05-01T14:30:00Z"
+    },
+    {
+      "termo": "LGPD",
+      "pronuncia": "léi-jê-pe-dê",
+      "categoria": "legal",
+      "definicao_simples": "Lei brasileira de proteção de dados pessoais. Tipo: você tem direito de saber quem tem seus dados e apagar se quiser.",
+      "definicao_tecnica": "Lei Geral de Proteção de Dados (Lei 13.709/2018). Regulamenta coleta, uso, armazenamento e compartilhamento de dados pessoais. Dados sensíveis (saúde, biometria) exigem consentimento explícito.",
+      "exemplo_real": "Se Mentor24h coleciona dados de saúde mental sem consentimento, multa é até R$ 50 milhões. LGPD não é feature futura — é requisito dia 1.",
+      "adicionado_por": "forge-constitution",
+      "adicionado_em": "2026-05-01T14:30:00Z"
+    },
+    {
+      "termo": "RLS (Row Level Security)",
+      "pronuncia": "ár-éls",
+      "categoria": "banco de dados",
+      "definicao_simples": "Segurança de linhas do banco. É como ter uma porta no banco que só abre pra dados da pessoa X — nunca mostra dados de Y.",
+      "definicao_tecnica": "Recurso de Supabase (PostgreSQL) que controla acesso a linhas específicas baseado em usuário logado. Implementação de fine-grained access control.",
+      "exemplo_real": "Usuário A só vê suas tarefas, não as do usuário B — mesmo que estejam na mesma tabela. RLS garante isso automaticamente.",
+      "adicionado_por": "forge-constitution",
+      "adicionado_em": "2026-05-01T14:30:00Z"
+    },
+    {
+      "termo": "Stress Test",
+      "pronuncia": "stres-téste",
+      "categoria": "qualidade",
+      "definicao_simples": "Teste onde você imagina as piores coisas que podem acontecer e verifica se o sistema aguenta.",
+      "definicao_tecnica": "Validação de robustez: testar sistema com dados extremos, casos de erro crítico, cenários de desastre. Em Constitution: validar se cada lei protege contra um cenário real de falha.",
+      "exemplo_real": "Stress test de Mentor24h: 'E se usuário tiver crise de suicídio?' → Validar que detecção não falha",
+      "adicionado_por": "forge-constitution",
+      "adicionado_em": "2026-05-01T14:30:00Z"
+    }
+  ],
+  "sprints": [],
+  "divergencias": [],
+  "decisoes": [],
+  "ideias_futuras": [],
+  "erros": []
+}

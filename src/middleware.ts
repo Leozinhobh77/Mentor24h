@@ -1,0 +1,58 @@
+import { createServerClient } from '@supabase/ssr';
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  });
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            request.cookies.set(name, value);
+            response.cookies.set(name, value, options);
+          });
+        },
+      },
+    }
+  );
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  // Rotas públicas
+  const publicRoutes = ['/', '/auth/login', '/auth/register'];
+  if (publicRoutes.includes(pathname)) {
+    // Se logado e tentando acessar /auth/login ou /auth/register, redireciona para dashboard
+    if (session && (pathname === '/auth/login' || pathname === '/auth/register')) {
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
+    return response;
+  }
+
+  // Rotas protegidas
+  const protectedRoutes = ['/dashboard', '/perfil', '/configuracoes'];
+  const isProtected = protectedRoutes.some(route => pathname.startsWith(route));
+
+  if (isProtected && !session) {
+    return NextResponse.redirect(new URL('/auth/login', request.url));
+  }
+
+  return response;
+}
+
+export const config = {
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|public|api/webhooks).*)'],
+};

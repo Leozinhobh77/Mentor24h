@@ -1,0 +1,218 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2026-05-01",
+    "totalKeywords": 58,
+    "categories": 7,
+    "description": "Crisis detection keywords with severity weights (0-10). Used for pattern matching in WhatsApp messages."
+  },
+  "keywords": {
+    "suicidal": {
+      "category": "suicidal",
+      "severity": "critical",
+      "weight": 10,
+      "terms": [
+        "quero morrer",
+        "vou me matar",
+        "suicida",
+        "suicidio",
+        "me suicidar",
+        "não quero viver",
+        "melhor morrer",
+        "morte",
+        "vou acabar com tudo",
+        "não aguento mais",
+        "cansado de viver",
+        "pior é morrer",
+        "mateme",
+        "morte é a solução"
+      ]
+    },
+    "self_harm": {
+      "category": "self_harm",
+      "severity": "high",
+      "weight": 9,
+      "terms": [
+        "corte",
+        "cortar meu",
+        "me corto",
+        "lâmina",
+        "faca",
+        "sangue",
+        "machucado",
+        "arranho",
+        "machucar",
+        "dor intencional",
+        "me machuco",
+        "ferimento",
+        "arranho meu",
+        "me firo"
+      ]
+    },
+    "overdose": {
+      "category": "overdose",
+      "severity": "critical",
+      "weight": 10,
+      "terms": [
+        "overdose",
+        "intoxicação",
+        "veneno",
+        "pílulas",
+        "remédios",
+        "droga",
+        "cocaína",
+        "heroína",
+        "crack",
+        "methamphetamine",
+        "álcool",
+        "bebida",
+        "intoxicado",
+        "envenenado",
+        "peguei uma droga"
+      ]
+    },
+    "violence": {
+      "category": "violence",
+      "severity": "high",
+      "weight": 8,
+      "terms": [
+        "violência",
+        "bate",
+        "agrede",
+        "agrediu",
+        "apanho",
+        "soco",
+        "tapa",
+        "chute",
+        "paulada",
+        "é violência",
+        "sofro violência",
+        "sofrer abuso",
+        "abusado",
+        "machucado por"
+      ]
+    },
+    "severe_distress": {
+      "category": "severe_distress",
+      "severity": "high",
+      "weight": 8,
+      "terms": [
+        "desespero",
+        "desesperado",
+        "não há saída",
+        "sem saída",
+        "preso aqui",
+        "prisioneiro",
+        "fim do mundo",
+        "final feliz",
+        "não suporto",
+        "está tudo ruim",
+        "não aguento",
+        "tudo desabou",
+        "vida é ruim",
+        "vida é sofrimento"
+      ]
+    },
+    "psychological_crisis": {
+      "category": "psychological_crisis",
+      "severity": "medium",
+      "weight": 6,
+      "terms": [
+        "pânico",
+        "panicado",
+        "ataques",
+        "ataque de pânico",
+        "ansiedade extrema",
+        "depressão",
+        "deprimido",
+        "sem esperança",
+        "tristeza profunda",
+        "vazio",
+        "nada importa",
+        "perdi tudo",
+        "abandonado",
+        "sozinho demais"
+      ]
+    },
+    "isolation_hopelessness": {
+      "category": "isolation_hopelessness",
+      "severity": "medium",
+      "weight": 7,
+      "terms": [
+        "sozinho",
+        "ninguém me ama",
+        "ninguém se importa",
+        "isolado",
+        "sem amigos",
+        "rejeição",
+        "rejeitado",
+        "não mereço",
+        "inútil",
+        "fracasso",
+        "falhei",
+        "não sou bom",
+        "sem valor",
+        "ninguém quer"
+      ]
+    }
+  },
+  "response_templates": {
+    "critical": {
+      "severity": 10,
+      "responseType": "audio",
+      "message": "Percebi que você pode estar em perigo. Se está pensando em se machucar, procure ajuda imediatamente.",
+      "resources": [
+        {
+          "name": "CVV (Centro de Valorização da Vida)",
+          "phone": "188",
+          "available": "24/7"
+        },
+        {
+          "name": "SAMU",
+          "phone": "192",
+          "available": "24/7"
+        },
+        {
+          "name": "Polícia",
+          "phone": "190",
+          "available": "24/7"
+        }
+      ]
+    },
+    "high": {
+      "severity": 8,
+      "responseType": "audio",
+      "message": "Percebi que você está enfrentando um momento muito difícil. Não está sozinho. Quer falar sobre isso?",
+      "resources": [
+        {
+          "name": "CVV",
+          "phone": "188",
+          "available": "24/7"
+        }
+      ]
+    },
+    "medium": {
+      "severity": 6,
+      "responseType": "text",
+      "message": "Vejo que você está passando por desafios. Estou aqui para ouvir e ajudar no que posso.",
+      "resources": []
+    }
+  },
+  "validation": {
+    "rules": [
+      "Each keyword must be lowercase",
+      "No duplicate terms across categories",
+      "Weight must be 0-10",
+      "Severity must be: critical, high, medium, low",
+      "Category must match array key",
+      "All terms must be non-empty strings"
+    ],
+    "stats": {
+      "totalTerms": 58,
+      "criticalTerms": 24,
+      "highTerms": 22,
+      "mediumTerms": 12,
+      "uniqueCategories": 7
+    }
+  }
+}

@@ -1,7 +1,63 @@
+# Dependencies
 node_modules/
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+/.nyc_output
+
+# Next.js
+/.next/
+/out/
+*.rsp
+
+# Production
+/build
+/dist
+
+# Misc
 .DS_Store
+*.pem
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+
+# Environment variables
 .env
 .env.local
-dist/
-build/
-*.log
+.env.*.local
+
+# Database
+/src/lib/db/migrations/*.sql
+*.db
+*.sqlite
+
+# IDE
+.vscode
+.idea
+*.sublime-project
+*.sublime-workspace
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Cache
+.cache/
+.eslintcache
+
+# Temporary files
+tmp/
+temp/
+
+# Project specific
+/forge/backups/
+.claude-memory/
