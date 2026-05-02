@@ -119,16 +119,17 @@ export class TwilioService {
     // Validar credentials
     const accountSid = process.env.TWILIO_ACCOUNT_SID;
     const authToken = process.env.TWILIO_AUTH_TOKEN;
-    const fromNumber = process.env.TWILIO_WHATSAPP_NUMBER;
+    // Support both TWILIO_PHONE_NUMBER and TWILIO_WHATSAPP_NUMBER for compatibility
+    const fromNumber = process.env.TWILIO_PHONE_NUMBER || process.env.TWILIO_WHATSAPP_NUMBER;
 
     if (!accountSid || !authToken || !fromNumber) {
       throw new Error(
-        'Missing Twilio credentials: TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER'
+        'Missing Twilio credentials: TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER'
       );
     }
 
     this.client = new Twilio(accountSid, authToken);
-    this.fromNumber = fromNumber;
+    this.fromNumber = fromNumber.replace('whatsapp:', ''); // Normalize: remove prefix if present
     this.retryConfig = { ...DEFAULT_RETRY_CONFIG, ...retryConfig };
   }
 
@@ -326,8 +327,24 @@ export class TwilioService {
 }
 
 /**
- * Singleton exportado
+ * Lazy-initialized singleton to prevent server crash if credentials are missing
  */
-export const twilioService = new TwilioService();
+let _twilioService: TwilioService | null = null;
+
+export function getTwilioService(): TwilioService {
+  if (!_twilioService) {
+    _twilioService = new TwilioService();
+  }
+  return _twilioService;
+}
+
+// For backward compatibility, export as module-level const with try/catch
+export const twilioService = (() => {
+  try {
+    return new TwilioService();
+  } catch {
+    return null as any;
+  }
+})();
 
 export default twilioService;
