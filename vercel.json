@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/routines/weekly-summary",
+      "schedule": "0 8 * * 1"
+    },
+    {
+      "path": "/api/routines/pattern-analysis",
+      "schedule": "0 14 * * 1"
+    },
+    {
+      "path": "/api/routines/daily-wellbeing",
+      "schedule": "0 19 * * *"
+    }
+  ]
+}

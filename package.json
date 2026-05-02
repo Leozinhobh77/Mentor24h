@@ -13,6 +13,7 @@
     "db:generate": "drizzle-kit generate:pg",
     "seed:categories": "ts-node src/scripts/seed-categories.ts",
     "seed:audios": "ts-node src/scripts/seed-audios.ts",
+    "inngest:dev": "npx inngest-cli@latest dev -u http://localhost:3000/api/inngest",
     "test": "jest",
     "test:watch": "jest --watch"
   },
