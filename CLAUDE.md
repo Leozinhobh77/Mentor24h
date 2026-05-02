@@ -111,12 +111,12 @@ printf 'window.__FORGE_DATA__ = ' > forge-data.js && cat forge-data.json >> forg
 ## Estado Atual
 
 - **Etapa Ativa:** EXECUÇÃO (Sprint 3)
-- **Sprint Atual:** 3 de 4 (Profile, Settings & WhatsApp Integration)
+- **Sprint Atual:** 3 de 4 (Profile, Settings, Twilio Real & Integration)
 - **Progresso:** 
   - Sprint 1 ✅ 100% completo (20/20 tasks)
   - Sprint 2 ✅ 100% completo (35/35 tasks)
-  - Sprint 3 ⏳ 10/70 tasks (TASK-056→065 ✅ BLOCO 1+2 100% | TASK-066→ BLOCO 3 WhatsApp Integration)
-- **Próximo Passo:** TASK-066 (WhatsApp Webhook Integration)
+  - Sprint 3 ✅ 15/70 tasks (TASK-056→070 ✅ BLOCO 1+2+3 100% | TASK-071→ BLOCO 4 Categorias & Rotinas)
+- **Próximo Passo:** TASK-071 (Categorias + Seeding)
 - **Bloqueadores:** Nenhum
 - **Divergências:** Nenhuma
 - **Erros:** Nenhum
@@ -181,6 +181,39 @@ printf 'window.__FORGE_DATA__ = ' > forge-data.js && cat forge-data.json >> forg
 
 **Documentação BLOCO 2:** `docs/TASKS-061-065-BLOCO2-SUMMARY.md`
 
+**BLOCO 3 (Sprint 3) — Twilio Real ✅:**
+
+**TASK-066 ✅ CONCLUÍDA:**
+- ✅ `.env.example` com variáveis Twilio documentadas
+- ✅ `TWILIO_SETUP.md` com guia completo de configuração
+
+**TASK-067 ✅ CONCLUÍDA:**
+- ✅ Phone verification service com generateCode, sendVerificationCode, confirmCode
+- ✅ `POST /api/auth/verify-phone` (enviar OTP)
+- ✅ `POST /api/auth/confirm-phone` (confirmar código)
+- ✅ UI em ProfileForm.tsx com verificação 6-dígitos, 10min expiry, max 3 tentativas
+- ✅ Support TWILIO_MOCK_MODE=true para testes sem Twilio real
+- ✅ Schema updates: whatsappVerified, phoneVerificationCode, phoneVerificationExpiry, phoneVerificationAttempts
+- ✅ Type updates em useAuth.ts
+
+**TASK-068 ✅ CONCLUÍDA:**
+- ✅ Webhook live test setup documentado em TWILIO_SETUP.md seção 4
+- ✅ ngrok setup + URL configuration no painel Twilio
+
+**TASK-069 ✅ CONCLUÍDA:**
+- ✅ Webhook body read fix (form-encoded, single read)
+- ✅ Webhook signature validation correto
+- ✅ Always return 200 status para Twilio não reenviar
+- ✅ inngest.send fix (usar helper em vez de .create())
+- ✅ Dead Letter Queue: `whatsapp.message.failed` event + `sendWhatsappMessageFailedEvent()` helper
+
+**TASK-070 ✅ CONCLUÍDA:**
+- ✅ `GET /api/twilio/health` endpoint com métricas de sistema
+- ✅ Status: healthy/degraded/down baseado em conectividade + response rate
+- ✅ TwilioService lazy initialization (prevent server crash sem credenciais)
+- ✅ Support ambas `TWILIO_PHONE_NUMBER` e `TWILIO_WHATSAPP_NUMBER` (compatibility)
+- ✅ Documentação: `docs/TASKS-066-070-BLOCO3-SUMMARY.md`
+
 **Sprint 2 — WhatsApp & Crisis Detection (35 tasks COMPLETAS) ✅:**
 
 - ✅ TASK-021→025: Webhook, DB Schema, Message Service, Phone Helpers, Inngest
@@ -199,7 +232,10 @@ printf 'window.__FORGE_DATA__ = ' > forge-data.js && cat forge-data.json >> forg
 **BLOCO COMPLETION STATUS (Sprint 3):**
 - ✅ BLOCO 1 (5/5): Reg, Login, Reset, useAuth, Middleware → 100%
 - ✅ BLOCO 2 (5/5): Alert Fixes, Middleware Sec, Dashboard, Perfil, Settings → 100%
-- ⏳ BLOCO 3 (0/?): WhatsApp Integration → Próximo
+- ✅ BLOCO 3 (5/5): Twilio Real, Phone Verify, Health Check, Setup Guide, Webhook Fixes → 100%
+- ⏳ BLOCO 4-7 (?/?): Categorias, Rotinas, Deploy, Testing → Próximo
+
+**Total Sprint 3:** 15/70 tasks (21% - 3 blocos completos)
 
 ---
 
