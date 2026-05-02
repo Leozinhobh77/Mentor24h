@@ -11,6 +11,8 @@ interface User {
   preferredAssistant: string;
   timezone: string;
   language: string;
+  whatsappNumber?: string;
+  whatsappVerified?: boolean;
   consentGiven: boolean;
   isActive: boolean;
   createdAt: string;
