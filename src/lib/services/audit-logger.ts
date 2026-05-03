@@ -1,4 +1,3 @@
-import { db } from '@/lib/db';
 import { z } from 'zod';
 
 /**
@@ -104,11 +103,8 @@ export class AuditLogger {
 
       // Salvar em DB (raw query se não tiver tabela em schema)
       // Placeholder: assumindo tabela audit_logs existe
-      const result = await db.query.audit_logs.findFirst({
-        where: (logs, { eq }) => eq(logs.id, 'placeholder'),
-      }).catch(() => null);
+      // TODO: Implementar tabela audit_logs no schema quando necessário
 
-      // Se tabela não existe ou não tem query, usar raw query placeholder
       // Para agora, apenas simulamos o salvamento
       console.log('[AuditLogger] ✅ Ação registrada:', {
         action: validated.action,

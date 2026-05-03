@@ -63,13 +63,13 @@ export const patternAnalysis = inngest.createFunction(
           await step.run(`save-result-${user.id}`, async () => {
             await db.insert(routines).values({
               userId: user.id,
-              type: 'pattern_analysis',
-              status: 'completed',
-              executedAt: new Date(),
-              lastResult: JSON.stringify({
-                analysis,
-                analyzedAt: new Date(),
-              }),
+              name: 'Pattern Analysis',
+              type: 'monthly' as const,
+              schedule: '0 14 * * 1',
+              content: analysis,
+              enabled: true,
+              lastExecuted: new Date(),
+              nextExecution: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
             });
           });
         } catch (err) {

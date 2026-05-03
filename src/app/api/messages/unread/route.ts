@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
  * Requisito: unread_count, crisis_count, last_message_at
  */
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const startTime = performance.now();
 

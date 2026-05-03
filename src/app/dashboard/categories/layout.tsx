@@ -1,5 +1,4 @@
-import { ProtectedRoute } from '@/components';
-import DashboardNavbar from '@/components/DashboardNavbar';
+import { ProtectedRoute, DashboardNavbar } from '@/components';
 
 export const metadata = {
   title: 'Categorias | Mentor24h',

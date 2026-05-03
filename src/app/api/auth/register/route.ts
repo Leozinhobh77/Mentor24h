@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { register } from '@/lib/services/auth.service';
+import { checkRateLimit } from '@/lib/utils/ratelimit';
 import { z } from 'zod';
 
 // Validation schema
@@ -12,6 +13,16 @@ const registerSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit: 60 tentativas por 1 hora
+    const rateLimitCheck = checkRateLimit(request, {
+      maxRequests: 60,
+      windowMs: 60 * 60 * 1000,
+    });
+
+    if (rateLimitCheck.exceeded && rateLimitCheck.response) {
+      return rateLimitCheck.response;
+    }
+
     const body = await request.json();
 
     // Validate input

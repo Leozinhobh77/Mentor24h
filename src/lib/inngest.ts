@@ -1,4 +1,4 @@
-import { Inngest, EventSchemas } from 'inngest';
+import { Inngest } from 'inngest';
 
 /**
  * Inngest Client Configuration
@@ -8,8 +8,8 @@ import { Inngest, EventSchemas } from 'inngest';
  * Example: whatsapp.message.received → detectCrisis → sendResponse
  */
 
-// Event schemas with strict typing
-const events = {
+// Event schemas with strict typing (Inngest v4 compatible)
+export const Events = {
   'whatsapp.message.received': {
     data: {
       userId: { type: 'number' } as const,
@@ -56,17 +56,15 @@ const events = {
       retryCount: { type: 'number' } as const,
     },
   },
-};
-
-type Events = EventSchemas<typeof events>;
+} as const;
 
 /**
  * Initialize Inngest client
  * Connects to Inngest cloud or self-hosted instance
  */
-export const inngest = new Inngest<Events>({
+export const inngest = new Inngest({
   id: 'mentor24h',
-  name: 'Mentor24h Ecosystem',
+  events: Events,
   apiBaseUrl: process.env.INNGEST_API_BASE_URL || 'https://inn.inngest.com',
   apiKey: process.env.INNGEST_API_KEY,
   isDev: process.env.NODE_ENV === 'development',

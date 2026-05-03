@@ -1,7 +1,7 @@
 import { db } from '@/lib/db';
-import { messages, users } from '@/lib/db/schema';
-import { NewMessage, Message } from '@/lib/db/schema';
-import { eq, and, desc, lte, gte } from 'drizzle-orm';
+import { messages } from '@/lib/db/schema';
+import { Message } from '@/lib/db/schema';
+import { eq, and, desc, gte } from 'drizzle-orm';
 import { z } from 'zod';
 
 // Validation schemas

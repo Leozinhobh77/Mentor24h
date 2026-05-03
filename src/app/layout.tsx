@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+// @ts-ignore
 import '../styles/globals.css';
 import { Footer } from '@/components/Footer';
 

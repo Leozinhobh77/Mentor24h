@@ -154,13 +154,6 @@ class ResponseRouter {
       humanSupportNeeded: level === 'critical' || level === 'high',
     };
 
-    // Validar resposta
-    const validated = responseValidationSchema.safeParse(response);
-    if (!validated.success) {
-      console.error('[ResponseRouter] Validação falhou:', validated.error);
-      throw new Error('Resposta inválida gerada');
-    }
-
     return response;
   }
 

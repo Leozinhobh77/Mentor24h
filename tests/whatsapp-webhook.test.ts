@@ -1,4 +1,5 @@
-import { POST } from '@/app/api/whatsapp/webhook/route';
+/** @jest-environment node */
+import { POST, GET } from '@/app/api/whatsapp/webhook/route';
 import { NextRequest } from 'next/server';
 import twilio from 'twilio';
 

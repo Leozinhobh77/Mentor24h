@@ -41,9 +41,9 @@ export const messages = pgTable('messages', {
   // Crisis detection fields
   severity: integer('severity').notNull().default(0), // 0-10 scale
   isCrisis: boolean('is_crisis').notNull().default(false),
-  crisisConfidence: integer('crisis_confidence').default(null), // 0-100
+  crisisConfidence: integer('crisis_confidence').notNull().default(0), // 0-100
   detectedPatterns: jsonb('detected_patterns'), // array of matched patterns
-  crisisKeywords: text('crisis_keywords', { mode: 'json' }), // array of detected keywords
+  crisisKeywords: jsonb('crisis_keywords'), // array of detected keywords
   crisisDetectedAt: timestamp('crisis_detected_at'), // when crisis was detected
   crisisResponseSent: boolean('crisis_response_sent').notNull().default(false),
   crisisResponseType: varchar('crisis_response_type', { length: 50 }), // 'audio', 'text', 'media'

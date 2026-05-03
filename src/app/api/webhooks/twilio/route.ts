@@ -16,8 +16,6 @@ const webhookPayloadSchema = z.object({
   timestamp: z.string().datetime().optional(),
 });
 
-type WebhookPayload = z.infer<typeof webhookPayloadSchema>;
-
 export async function POST(request: NextRequest) {
   const startTime = performance.now();
 

@@ -27,8 +27,8 @@ export async function generateToken(
 }
 
 export async function validateWhatsappWebhook(
-  signature: string,
-  body: string
+  _signature: string,
+  _body: string
 ): Promise<boolean> {
   // Validate Twilio webhook signature
   // Implementation depends on Twilio SDK

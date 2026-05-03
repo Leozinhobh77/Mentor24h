@@ -1,7 +1,7 @@
-import { twilioService, TwilioMessageResult } from '@/lib/services/twilio-service';
+import { twilioService } from '@/lib/services/twilio-service';
 import { responseRouter, CrisisResponse } from '@/lib/services/response-router';
 import { z } from 'zod';
-import { messageService } from '@/lib/services/message.service';
+import { MessageService } from '@/lib/services/message.service';
 
 /**
  * TASK-033: Crisis Response Sender
@@ -86,15 +86,11 @@ export class CrisisResponseSender {
       });
 
       // STEP 2: Enviar via Twilio (com retry 3x)
-      const twilioStart = performance.now();
-
       const twilioResult = await twilioService.sendCrisisResponse(
         validated.userId,
         validated.phoneNumber,
         response
       );
-
-      const twilioTime = performance.now() - twilioStart;
 
       console.log('[CrisisResponseSender] ✅ Twilio enviado:', {
         messageId: twilioResult.messageId,
@@ -105,13 +101,15 @@ export class CrisisResponseSender {
 
       // STEP 3: Marcar resposta como enviada na mensagem original
       try {
-        await messageService.updateMessage({
-          id: validated.messageId as any,
-          crisis_response_sent: true,
-          updated_at: new Date(),
+        const messageId = typeof validated.messageId === 'string'
+          ? parseInt(validated.messageId, 10)
+          : validated.messageId;
+
+        await MessageService.update(messageId, validated.userId, {
+          crisisResponseSent: true,
         });
 
-        console.log('[CrisisResponseSender] 💾 Mensagem atualizada (crisis_response_sent = true)');
+        console.log('[CrisisResponseSender] 💾 Mensagem atualizada (status = responded)');
       } catch (updateError) {
         console.warn('[CrisisResponseSender] ⚠️ Falha ao atualizar mensagem (não bloqueia):', updateError);
       }
@@ -229,7 +227,7 @@ export class CrisisResponseSender {
     return successful
       .map((r) => (r as PromiseFulfilledResult<CrisisResponseSenderResult>).value)
       .concat(
-        failed.map((r) => ({
+        failed.map(() => ({
           success: false,
           severity: 'none' as const,
           phoneNumber: 'unknown',
@@ -247,8 +245,6 @@ export class CrisisResponseSender {
   async healthCheck(testPhoneNumber: string): Promise<boolean> {
     try {
       console.log('[CrisisResponseSender] 🏥 Health check iniciado...');
-
-      const testResponse = responseRouter.getResponse('none');
 
       const result = await twilioService.sendMessage({
         userId: -1, // ID fake para health check

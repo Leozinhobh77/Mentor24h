@@ -20,8 +20,8 @@ export const weeklySummary = inngest.createFunction(
 
       const batchSize = 10;
       const batches = Math.ceil(activeUsers.length / batchSize);
-      const processedUsers: string[] = [];
-      const failedUsers: string[] = [];
+      const processedUsers: number[] = [];
+      const failedUsers: number[] = [];
 
       // Process users in batches
       for (let i = 0; i < batches; i++) {
@@ -57,10 +57,11 @@ export const weeklySummary = inngest.createFunction(
             // Send via Twilio
             await step.run(`send-whatsapp-${user.id}`, async () => {
               const twilioService = new TwilioService();
-              await twilioService.sendMessage(
-                user.whatsappNumber || '',
-                `📊 Seu resumo semanal:\n\n${summary}`
-              );
+              await twilioService.sendMessage({
+                userId: user.id,
+                phoneNumber: user.whatsappNumber || '',
+                message: `📊 Seu resumo semanal:\n\n${summary}`,
+              });
             });
 
             processedUsers.push(user.id);
@@ -73,16 +74,23 @@ export const weeklySummary = inngest.createFunction(
 
       // Log execution
       await step.run('log-execution', async () => {
+        // Find first user for system routine logging
+        const firstUser = await db
+          .select()
+          .from(users)
+          .limit(1);
+
+        const systemUserId = firstUser[0]?.id || 1;
+
         await db.insert(routines).values({
-          userId: 'system',
-          type: 'weekly_summary',
-          status: 'completed',
-          executedAt: new Date(),
-          lastResult: JSON.stringify({
-            usersProcessed: processedUsers.length,
-            summariesSent: processedUsers.length,
-            failed: failedUsers.length,
-          }),
+          userId: systemUserId,
+          type: 'weekly' as const,
+          name: 'Weekly Summary',
+          schedule: '0 8 * * 1',
+          content: `Sent ${processedUsers.length} summaries to users`,
+          enabled: true,
+          lastExecuted: new Date(),
+          nextExecution: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         });
       });
 

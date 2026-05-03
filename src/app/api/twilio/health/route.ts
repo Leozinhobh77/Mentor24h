@@ -4,7 +4,7 @@ import { messages } from '@/lib/db/schema';
 import { eq, and, gte, sql } from 'drizzle-orm';
 import { getTwilioService } from '@/lib/services/twilio-service';
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const now = new Date();
     const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);

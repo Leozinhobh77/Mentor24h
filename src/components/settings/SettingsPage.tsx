@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/hooks/useAuth';
-import { Alert } from '../Alert';
+import { Alert } from '@/components';
 
 export function SettingsPage() {
   const { user, logout } = useAuth();
@@ -101,10 +101,10 @@ export function SettingsPage() {
       <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-6">
         <h2 className="text-xl font-bold text-blue-300 mb-6">⚖️ LGPD</h2>
         <div className="space-y-3">
-          {user?.consentDate && (
+          {user && 'consentDate' in user && (user as any).consentDate && (
             <p className="text-blue-200">
               <span className="font-medium">Consentimento dado em:</span>{' '}
-              {new Date(user.consentDate).toLocaleDateString('pt-BR')}
+              {new Date((user as any).consentDate).toLocaleDateString('pt-BR')}
             </p>
           )}
           <div className="space-y-2">

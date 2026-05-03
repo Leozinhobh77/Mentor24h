@@ -33,29 +33,10 @@ export function useAuth(): AuthContextType {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Carregar token do localStorage
-  const getToken = useCallback(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('auth_token');
-    }
-    return null;
-  }, []);
+  // NOTA: Auth tokens são gerenciados via Supabase SSR + HttpOnly cookies
+  // Não usar localStorage para dados sensíveis (Lei SEC-03)
 
-  // Salvar token no localStorage
-  const setToken = useCallback((token: string) => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('auth_token', token);
-    }
-  }, []);
-
-  // Remover token do localStorage
-  const removeToken = useCallback(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('auth_token');
-    }
-  }, []);
-
-  // Fazer login
+  // Fazer login (token é salvo como HttpOnly cookie pela API)
   const login = useCallback(async (email: string, password: string) => {
     setIsLoading(true);
     try {
@@ -63,6 +44,7 @@ export function useAuth(): AuthContextType {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
+        credentials: 'include',
       });
 
       const data = await response.json();
@@ -71,82 +53,60 @@ export function useAuth(): AuthContextType {
         throw new Error(data.error || 'Erro ao fazer login');
       }
 
-      setToken(data.data.token);
       setUser(data.data.user);
       router.push('/dashboard');
     } catch (error) {
-      removeToken();
       setUser(null);
       throw error;
     } finally {
       setIsLoading(false);
     }
-  }, [setToken, removeToken, router]);
+  }, [router]);
 
-  // Fazer logout
+  // Fazer logout (cookie httpOnly é apagada pela API)
   const logout = useCallback(async () => {
     setIsLoading(true);
     try {
-      const token = getToken();
-      if (!token) {
-        throw new Error('Sem token de autenticação');
-      }
-
       await fetch('/api/auth/logout', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
       });
 
-      removeToken();
       setUser(null);
       router.push('/auth/login');
     } catch (error) {
-      removeToken();
       setUser(null);
       throw error;
     } finally {
       setIsLoading(false);
     }
-  }, [getToken, removeToken, router]);
+  }, [router]);
 
-  // Carregar usuário atual
+  // Carregar usuário atual (cookie httpOnly enviada automaticamente)
   const refreshUser = useCallback(async () => {
     setIsLoading(true);
     try {
-      const token = getToken();
-      if (!token) {
-        setUser(null);
-        setIsLoading(false);
-        return;
-      }
-
       const response = await fetch('/api/auth/me', {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
       });
 
       const data = await response.json();
 
       if (!data.success) {
-        removeToken();
         setUser(null);
         return;
       }
 
       setUser(data.data.user);
     } catch (error) {
-      removeToken();
       setUser(null);
     } finally {
       setIsLoading(false);
     }
-  }, [getToken, removeToken]);
+  }, []);
 
   // Solicitar reset de senha
   const resetPassword = useCallback(async (email: string) => {
@@ -168,15 +128,10 @@ export function useAuth(): AuthContextType {
     }
   }, []);
 
-  // Executar ao montar — com dependency correta para evitar fetch duplicado
+  // Executar ao montar — carrega usuário via cookie httpOnly
   useEffect(() => {
-    const token = getToken();
-    if (token) {
-      refreshUser();
-    } else {
-      setIsLoading(false);
-    }
-  }, [getToken, refreshUser]);
+    refreshUser();
+  }, [refreshUser]);
 
   return {
     user,

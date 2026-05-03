@@ -21,9 +21,7 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const user = userResult.data.user;
-
-    const result = await deleteAccount(user.supabaseId);
+    const result = await deleteAccount();
 
     if (!result.success) {
       return NextResponse.json(

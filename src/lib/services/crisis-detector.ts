@@ -49,12 +49,13 @@ class CrisisDetector {
       .replace(/[̀-ͯ]/g, '');
   }
 
-  private extractWords(text: string): string[] {
-    return text
-      .toLowerCase()
-      .split(/\s+/)
-      .map((word) => word.replace(/[^\w]/g, ''));
-  }
+  // Note: extractWords helper method not currently used but kept for potential future use
+  // private extractWords(text: string): string[] {
+  //   return text
+  //     .toLowerCase()
+  //     .split(/\s+/)
+  //     .map((word) => word.replace(/[^\w]/g, ''));
+  // }
 
   detect(message: string): DetectionResult {
     if (!message || message.trim().length === 0) {

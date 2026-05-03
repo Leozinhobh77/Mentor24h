@@ -4,6 +4,7 @@ export { RegisterForm } from './auth/RegisterForm';
 
 // Layout Components
 export { Navbar } from './Navbar';
+export { DashboardNavbar } from './DashboardNavbar';
 export { Footer } from './Footer';
 export { ProtectedRoute } from './ProtectedRoute';
 

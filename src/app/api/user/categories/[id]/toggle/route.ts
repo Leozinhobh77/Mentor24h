@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { userCategories } from '@/lib/db/schema';
 import { getUserFromToken } from '@/lib/services/auth.service';
-import { eq, and, isNull } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 
 export async function POST(
   request: NextRequest,

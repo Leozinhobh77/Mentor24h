@@ -1,0 +1,13 @@
+{
+  "enableAllProjectMcpServers": false,
+  "enabledMcpjsonServers": ["context7"],
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write",
+      "Edit",
+      "Bash(npm *)",
+      "Bash(git *)"
+    ]
+  }
+}

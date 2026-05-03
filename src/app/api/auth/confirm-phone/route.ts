@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getUserFromToken } from '@/lib/services/auth.service';
+import { checkRateLimit } from '@/lib/utils/ratelimit';
 import { PhoneVerificationService } from '@/lib/services/phone-verification.service';
 
 const confirmPhoneSchema = z.object({
@@ -12,6 +13,16 @@ const confirmPhoneSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit: 10 tentativas por 15 minutos
+    const rateLimitCheck = checkRateLimit(request, {
+      maxRequests: 10,
+      windowMs: 15 * 60 * 1000,
+    });
+
+    if (rateLimitCheck.exceeded && rateLimitCheck.response) {
+      return rateLimitCheck.response;
+    }
+
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.split(' ')[1];
 

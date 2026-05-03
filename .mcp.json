@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "context7",
+      "args": ["stdio"],
+      "description": "Upstash Context7 — Library documentation and API reference provider"
+    }
+  }
+}

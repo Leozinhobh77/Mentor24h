@@ -87,7 +87,8 @@ export async function GET(request: NextRequest) {
 
     // Filtro por severity
     if (validated.severity !== undefined) {
-      filtered = filtered.filter((msg) => msg.severity >= validated.severity);
+      const minSeverity = validated.severity;
+      filtered = filtered.filter((msg) => msg.severity >= minSeverity);
     }
 
     // Filtro por crise

@@ -63,10 +63,11 @@ export const dailyWellbeing = inngest.createFunction(
 
           await step.run(`send-tip-${user.id}`, async () => {
             const twilioService = new TwilioService();
-            await twilioService.sendMessage(
-              user.whatsappNumber || '',
-              `Dica de Bem-Estar 🌟\n\n${tip}`
-            );
+            await twilioService.sendMessage({
+              userId: user.id,
+              phoneNumber: user.whatsappNumber || '',
+              message: `Dica de Bem-Estar 🌟\n\n${tip}`,
+            });
           });
         } catch (err) {
           console.error(`Failed to send tip to user ${user.id}:`, err);
@@ -76,17 +77,23 @@ export const dailyWellbeing = inngest.createFunction(
 
       // Log execution
       await step.run('log-execution', async () => {
+        // Find first user for system routine logging
+        const firstUser = await db
+          .select()
+          .from(users)
+          .limit(1);
+
+        const systemUserId = firstUser[0]?.id || 1;
+
         await db.insert(routines).values({
-          userId: 'system',
-          type: 'daily_wellbeing',
-          status: 'completed',
-          executedAt: new Date(),
-          lastResult: JSON.stringify({
-            totalSent: sentCount.withClaude + sentCount.withTemplate,
-            withClaude: sentCount.withClaude,
-            withTemplate: sentCount.withTemplate,
-            failed: sentCount.failed,
-          }),
+          userId: systemUserId,
+          name: 'Daily Wellbeing',
+          type: 'daily' as const,
+          schedule: '0 19 * * *',
+          content: `Sent ${sentCount.withClaude + sentCount.withTemplate} tips`,
+          enabled: true,
+          lastExecuted: new Date(),
+          nextExecution: new Date(Date.now() + 24 * 60 * 60 * 1000),
         });
       });
 

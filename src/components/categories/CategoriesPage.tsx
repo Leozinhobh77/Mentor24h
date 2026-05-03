@@ -187,7 +187,7 @@ export default function CategoriesPage() {
 
   return (
     <div className="space-y-8">
-      {(Object.entries(PILLAR_CONFIG) as const).map(([pillar, config]) => {
+      {Object.entries(PILLAR_CONFIG).map(([pillar, config]) => {
         const cats = categories[pillar as keyof typeof categories];
         const selectedCount = cats.filter((c) => c.isSelected).length;
 

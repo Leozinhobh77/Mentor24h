@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -33,6 +33,17 @@ export function ProfileForm() {
   const [verificationStep, setVerificationStep] = useState<'idle' | 'sending' | 'sent' | 'confirming' | 'verified'>('idle');
   const [verificationCode, setVerificationCode] = useState('');
   const [verificationError, setVerificationError] = useState<string | null>(null);
+
+  // Refs for timers
+  const successTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const verificationTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (successTimerRef.current) clearTimeout(successTimerRef.current);
+      if (verificationTimerRef.current) clearTimeout(verificationTimerRef.current);
+    };
+  }, []);
 
   const {
     register,
@@ -82,7 +93,8 @@ export function ProfileForm() {
       }
 
       setSuccess(true);
-      setTimeout(() => setSuccess(false), 5000);
+      if (successTimerRef.current) clearTimeout(successTimerRef.current);
+      successTimerRef.current = setTimeout(() => setSuccess(false), 5000);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Erro desconhecido';
       setError(message);
@@ -165,7 +177,8 @@ export function ProfileForm() {
 
       setVerificationStep('verified');
       setVerificationCode('');
-      setTimeout(() => {
+      if (verificationTimerRef.current) clearTimeout(verificationTimerRef.current);
+      verificationTimerRef.current = setTimeout(() => {
         setVerificationStep('idle');
       }, 2000);
     } catch (err) {
@@ -303,14 +316,17 @@ export function ProfileForm() {
             >
               Verificar WhatsApp
             </button>
-          ) : verificationStep === 'sending' || verificationStep === 'confirming' ? (
+          ) : verificationStep === 'sending' ? (
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin"></div>
-              <span className="text-blue-300 text-sm">
-                {verificationStep === 'sending' ? 'Enviando código...' : 'Confirmando...'}
-              </span>
+              <span className="text-blue-300 text-sm">Enviando código...</span>
             </div>
-          ) : verificationStep === 'sent' || verificationStep === 'confirming' ? (
+          ) : verificationStep === 'confirming' ? (
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin"></div>
+              <span className="text-blue-300 text-sm">Confirmando...</span>
+            </div>
+          ) : verificationStep === 'sent' ? (
             <div className="space-y-2">
               <label htmlFor="verificationCode" className="block text-xs font-medium text-gray-300">
                 Código de 6 dígitos:
@@ -331,7 +347,7 @@ export function ProfileForm() {
                 <button
                   type="button"
                   onClick={handleConfirmCode}
-                  disabled={verificationCode.length !== 6 || verificationStep === 'confirming'}
+                  disabled={verificationCode.length !== 6}
                   className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm rounded-lg transition-colors font-medium whitespace-nowrap"
                 >
                   Confirmar
@@ -340,7 +356,7 @@ export function ProfileForm() {
               <button
                 type="button"
                 onClick={handleVerifyWhatsApp}
-                disabled={isLoading || verificationStep === 'confirming'}
+                disabled={isLoading}
                 className="text-blue-400 hover:text-blue-300 text-xs underline"
               >
                 Reenviar código

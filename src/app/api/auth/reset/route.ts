@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { resetPassword } from '@/lib/services/auth.service';
+import { checkRateLimit } from '@/lib/utils/ratelimit';
 
 const resetSchema = z.object({
   email: z.string().email('Email inválido'),
@@ -8,6 +9,16 @@ const resetSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit: 3 tentativas por 1 hora
+    const rateLimitCheck = checkRateLimit(request, {
+      maxRequests: 3,
+      windowMs: 60 * 60 * 1000,
+    });
+
+    if (rateLimitCheck.exceeded && rateLimitCheck.response) {
+      return rateLimitCheck.response;
+    }
+
     const body = await request.json();
     const { email } = resetSchema.parse(body);
 

@@ -9,24 +9,24 @@
 
 -- Índice em messages para filtros por usuário (N+1 prevention)
 CREATE INDEX IF NOT EXISTS idx_messages_user_id
-ON messages(userId);
+ON messages(user_id);
 
 -- Índice em messages para ordenação por data (comum em dashboards)
 CREATE INDEX IF NOT EXISTS idx_messages_created_at
-ON messages(createdAt DESC);
+ON messages(created_at DESC);
 
 -- Índice composto em user_categories para soft-delete pattern
--- Otimiza: SELECT * FROM user_categories WHERE userId = X AND deletedAt IS NULL
+-- Otimiza: SELECT * FROM user_categories WHERE user_id = X AND deleted_at IS NULL
 CREATE INDEX IF NOT EXISTS idx_user_categories_user_id_deleted
-ON user_categories(userId, deletedAt);
+ON user_categories(user_id, deleted_at);
 
 -- Índice em crisis_audit_log para buscar por usuário
 CREATE INDEX IF NOT EXISTS idx_crisis_audit_log_user_id
-ON crisis_audit_log(userId);
+ON crisis_audit_log(user_id);
 
 -- Índice em crisis_audit_log para timeline (mais recentes primeiro)
 CREATE INDEX IF NOT EXISTS idx_crisis_audit_log_created_at
-ON crisis_audit_log(createdAt DESC);
+ON crisis_audit_log(detected_at DESC);
 
 -- ============================================================================
 -- VERIFICAÇÃO

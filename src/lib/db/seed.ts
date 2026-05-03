@@ -1,5 +1,5 @@
 import { db } from './index';
-import { categories, audios, pillarEnum } from './schema';
+import { categories } from './schema';
 
 /**
  * Seed database with initial data
@@ -76,17 +76,18 @@ export async function seedAudios() {
   // Simplified audio seed (92 audios)
   // In production, these would come from a CMS or storage service
 
-  const audioCategories = [
-    { category: 'Meditação', count: 20 },
-    { category: 'Respiração', count: 8 },
-    { category: 'Prayers', count: 15 },
-    { category: 'Stories', count: 12 },
-    { category: 'Motivation', count: 10 },
-    { category: 'Exercises', count: 8 },
-    { category: 'Inspirational', count: 6 },
-    { category: 'Comedy', count: 8 },
-    { category: 'Affirmations', count: 5 },
-  ];
+  // Note: audioCategories defined but not used in simplified seed
+  // const audioCategories = [
+  //   { category: 'Meditação', count: 20 },
+  //   { category: 'Respiração', count: 8 },
+  //   { category: 'Prayers', count: 15 },
+  //   { category: 'Stories', count: 12 },
+  //   { category: 'Motivation', count: 10 },
+  //   { category: 'Exercises', count: 8 },
+  //   { category: 'Inspirational', count: 6 },
+  //   { category: 'Comedy', count: 8 },
+  //   { category: 'Affirmations', count: 5 },
+  // ];
 
   console.log('🎵 Seeding 92 audios...');
 

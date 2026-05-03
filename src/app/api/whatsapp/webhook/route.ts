@@ -3,7 +3,7 @@ import { z } from 'zod';
 import twilio from 'twilio';
 import { db } from '@/lib/db';
 import { users, messages } from '@/lib/db/schema';
-import { inngest, sendWhatsappMessageReceivedEvent, sendWhatsappMessageFailedEvent } from '@/lib/inngest';
+import { inngest as _inngest, sendWhatsappMessageReceivedEvent, sendWhatsappMessageFailedEvent as _sendWhatsappMessageFailedEvent } from '@/lib/inngest';
 import { eq } from 'drizzle-orm';
 
 const twilioWebhookSchema = z.object({
@@ -48,7 +48,7 @@ async function logWebhookAudit(
   userId: number,
   messageId: string,
   messageContent: string,
-  status: 'received' | 'error'
+  _status: 'received' | 'error'
 ) {
   try {
     await db

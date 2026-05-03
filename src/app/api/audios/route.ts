@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { audios, categories } from '@/lib/db/schema';
+import { audios } from '@/lib/db/schema';
 import { getUserFromToken } from '@/lib/services/auth.service';
-import { eq } from 'drizzle-orm';
 
 export async function GET(request: NextRequest) {
   try {
@@ -27,7 +26,6 @@ export async function GET(request: NextRequest) {
 
     // Get query params
     const { searchParams } = new URL(request.url);
-    const categoryFilter = searchParams.get('category');
     const limit = parseInt(searchParams.get('limit') || '50', 10);
     const offset = parseInt(searchParams.get('offset') || '0', 10);
 

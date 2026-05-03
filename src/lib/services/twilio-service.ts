@@ -157,7 +157,6 @@ export class TwilioService {
       });
 
       let lastError: TwilioError | null = null;
-      let messageId: string | undefined;
 
       // Loop de retry
       for (let attempt = 0; attempt <= this.retryConfig.maxRetries; attempt++) {
@@ -169,8 +168,6 @@ export class TwilioService {
             body: validated.message,
             mediaUrl: validated.audioUrl ? [validated.audioUrl] : undefined,
           });
-
-          messageId = response.sid;
 
           const endTime = performance.now();
           const executionTimeMs = endTime - startTime;

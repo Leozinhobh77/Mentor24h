@@ -57,19 +57,19 @@ export async function flagCrisisInDB(input: FlagCrisisInput): Promise<FlagCrisis
 
     // UPDATE otimizado usando índices
     // Índices garantem < 50ms mesmo em 1M+ registros
-    const result = await db
+    await db
       .update(messages)
       .set({
-        is_crisis: true,
+        isCrisis: true,
         severity: validated.severity,
-        crisis_keywords: validated.keywords,
-        crisis_detected_at: new Date(),
-        updated_at: new Date(),
+        crisisKeywords: validated.keywords,
+        crisisDetectedAt: new Date(),
+        updatedAt: new Date(),
       })
       .where(
         and(
           eq(messages.id, validated.messageId),
-          eq(messages.user_id, validated.userId)
+          eq(messages.userId, validated.userId)
         )
       );
 
@@ -117,13 +117,13 @@ export async function unflagCrisisInDB(
     await db
       .update(messages)
       .set({
-        is_crisis: false,
+        isCrisis: false,
         severity: 0,
-        crisis_keywords: null,
-        crisis_detected_at: null,
-        updated_at: new Date(),
+        crisisKeywords: null,
+        crisisDetectedAt: null,
+        updatedAt: new Date(),
       })
-      .where(and(eq(messages.id, messageId), eq(messages.user_id, userId)));
+      .where(and(eq(messages.id, messageId), eq(messages.userId, userId)));
 
     const endTime = performance.now();
     const executionTimeMs = endTime - startTime;

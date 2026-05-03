@@ -56,11 +56,7 @@ export class PhoneVerificationService {
       }
 
       const message = `Seu código de verificação Mentor24h é: ${code}. Válido por 10 minutos.`;
-      await twilioService.sendConfirmation({
-        userId,
-        phoneNumber,
-        message,
-      });
+      await twilioService.sendConfirmation(userId, phoneNumber, message);
 
       console.log('[PHONE VERIFICATION] Code sent', {
         userId,

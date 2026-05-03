@@ -2,11 +2,9 @@ import { inngest } from '@/lib/inngest';
 import { crisisDetector } from '@/lib/services/crisis-detector';
 import { responseRouter } from '@/lib/services/response-router';
 import { twilioService } from '@/lib/services/twilio-service';
-import { messageService } from '@/lib/services/message.service';
 import { flagCrisisInDB } from '@/lib/services/crisis-flagging';
 import { db } from '@/lib/db';
 import { messages } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
 
 /**
  * TASK-032: Inngest Workflow — WhatsApp Message Processing
@@ -28,14 +26,10 @@ export const processWhatsappMessage = inngest.createFunction(
   {
     id: 'process-whatsapp-message',
     name: 'Process WhatsApp Message',
-    retryPolicy: {
-      initialDelayMs: 1000,
-      maxAttempts: 3,
-    },
   },
   { event: 'whatsapp.message.received' },
   async ({ event, step }) => {
-    const { userId, whatsappMessageId, fromNumber, content, mediaUrl, timestamp } = event.data;
+    const { userId, whatsappMessageId, fromNumber, content, mediaUrl } = event.data;
 
     const workflowStart = performance.now();
 
@@ -74,28 +68,29 @@ export const processWhatsappMessage = inngest.createFunction(
 
       const dbSaveStart = performance.now();
 
+      // Criar ou atualizar usuário baseado no número WhatsApp
+      const user = await db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.whatsappNumber, fromNumber),
+      });
+
+      const userIdToSave = user?.id || userId;
+
       const savedMessage = await step.run('save-message', async () => {
         console.log('[Workflow] 💾 Salvando mensagem no banco...');
 
-        // Criar ou atualizar usuário baseado no número WhatsApp
-        const user = await db.query.users.findFirst({
-          where: (users, { eq }) => eq(users.phone_number, fromNumber),
-        });
-
-        const userIdToSave = user?.id || userId;
-
         // Salvar mensagem
         const messageData = {
-          user_id: userIdToSave,
-          body: content,
+          userId: userIdToSave,
+          whatsappMessageId: whatsappMessageId,
+          content: content,
           direction: 'inbound' as const,
-          media_url: mediaUrl || null,
+          mediaUrl: mediaUrl || null,
           severity: detection.severity,
-          is_crisis: detection.detected,
-          crisis_keywords: detection.detected ? detection.keywords : null,
-          crisis_detected: detection.detected,
-          crisis_detected_at: detection.detected ? new Date() : null,
-          processed_by: 'pattern_match' as const,
+          isCrisis: detection.detected,
+          crisisKeywords: detection.detected ? detection.keywords : null,
+          crisisDetected: detection.detected,
+          crisisDetectedAt: detection.detected ? new Date() : null,
+          status: 'received' as const,
         };
 
         // Usando drizzle insert
@@ -112,7 +107,7 @@ export const processWhatsappMessage = inngest.createFunction(
       console.log('[Workflow] ✅ Mensagem salva:', {
         messageId: savedMessage?.id,
         severity: savedMessage?.severity,
-        isCrisis: savedMessage?.is_crisis,
+        isCrisis: savedMessage?.isCrisis,
         executionTimeMs: dbSaveTime.toFixed(2),
       });
 
@@ -159,8 +154,6 @@ export const processWhatsappMessage = inngest.createFunction(
         console.log('[Workflow] ✅ Crise marcada (executionTimeMs: ' + flaggingTime.toFixed(2) + ')');
 
         // STEP 3C: Enviar Resposta via Twilio
-        const twilioStart = performance.now();
-
         const twilioResult = await step.run('send-twilio-response', async () => {
           console.log('[Workflow] 📱 Enviando resposta via Twilio...');
 
@@ -184,8 +177,6 @@ export const processWhatsappMessage = inngest.createFunction(
             return null;
           }
         });
-
-        const twilioTime = performance.now() - twilioStart;
 
         // STEP 3D: Disparar Evento de Resposta Enviada
         if (twilioResult) {

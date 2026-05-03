@@ -25,7 +25,16 @@ jest.mock('@/lib/services/response-router');
 jest.mock('@/lib/services/twilio-service');
 jest.mock('@/lib/services/message.service');
 jest.mock('@/lib/services/crisis-flagging');
-jest.mock('@/lib/inngest');
+jest.mock('@/lib/inngest', () => ({
+  inngest: {
+    createFunction: jest.fn((config, trigger, handler) => ({
+      ...config,
+      trigger,
+      fn: handler,
+    })),
+    send: jest.fn(),
+  },
+}));
 jest.mock('@/lib/db');
 
 describe('Process WhatsApp Workflow (TASK-032)', () => {
