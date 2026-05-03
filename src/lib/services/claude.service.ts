@@ -31,6 +31,8 @@ class ClaudeService {
 
 let _claudeService: ClaudeService | null = null;
 
+export { ClaudeService };
+
 export function getClaudeService(): ClaudeService {
   if (!_claudeService) _claudeService = new ClaudeService();
   return _claudeService;
