@@ -3,21 +3,6 @@
   "devCommand": "npm run dev",
   "installCommand": "npm ci",
 
-  "env": [
-    "NEXT_PUBLIC_SUPABASE_URL",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY",
-    "SUPABASE_SERVICE_ROLE_KEY",
-    "DATABASE_URL",
-    "TWILIO_ACCOUNT_SID",
-    "TWILIO_AUTH_TOKEN",
-    "TWILIO_PHONE_NUMBER",
-    "CLAUDE_API_KEY",
-    "INNGEST_EVENT_KEY",
-    "INNGEST_SIGNING_KEY",
-    "INNGEST_API_KEY",
-    "NEXT_PUBLIC_APP_URL",
-    "NODE_ENV"
-  ],
 
   "crons": [
     {
