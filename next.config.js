@@ -2,13 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
 
-  // Vercel deployment optimizations
-  swcMinify: true,
-  compress: true,
-
-  // Font optimization
-  optimizeFonts: true,
-
   // Image optimization
   images: {
     unoptimized: false,
@@ -66,6 +59,24 @@ const nextConfig = {
     serverActions: {
       allowedOrigins: ['localhost:3000', process.env.NEXT_PUBLIC_APP_URL],
     },
+  },
+
+  // Webpack configuration to handle Twilio SDK
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.externals.push({
+        'twilio': 'commonjs twilio',
+      });
+    }
+
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      path: false,
+      crypto: false,
+    };
+
+    return config;
   },
 };
 

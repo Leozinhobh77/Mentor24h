@@ -19,11 +19,12 @@ type UpdatePayload = z.infer<typeof updateCrisisResponseSchema>;
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const startTime = performance.now();
-    const messageId = params.id;
+    const { id } = await params;
+    const messageId = id;
 
     // 1. Validar permissão (RBAC)
     // TODO: integrar com auth middleware

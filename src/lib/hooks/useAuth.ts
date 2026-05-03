@@ -168,10 +168,15 @@ export function useAuth(): AuthContextType {
     }
   }, []);
 
-  // Executar ao montar o component
+  // Executar ao montar — com dependency correta para evitar fetch duplicado
   useEffect(() => {
-    refreshUser();
-  }, [refreshUser]);
+    const token = getToken();
+    if (token) {
+      refreshUser();
+    } else {
+      setIsLoading(false);
+    }
+  }, [getToken, refreshUser]);
 
   return {
     user,

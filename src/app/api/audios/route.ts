@@ -27,32 +27,11 @@ export async function GET(request: NextRequest) {
 
     // Get query params
     const { searchParams } = new URL(request.url);
-    const pillarFilter = searchParams.get('pillar');
     const categoryFilter = searchParams.get('category');
     const limit = parseInt(searchParams.get('limit') || '50', 10);
     const offset = parseInt(searchParams.get('offset') || '0', 10);
 
-    // Base query
-    let query = db.select().from(audios);
-
-    // Apply category filter if provided
-    if (categoryFilter) {
-      // Find category by name
-      const cat = await db
-        .select()
-        .from(categories)
-        .where(eq(categories.name, categoryFilter))
-        .limit(1);
-
-      if (cat.length > 0) {
-        query = db
-          .select()
-          .from(audios)
-          .where(eq(audios.categoryId, cat[0].id));
-      }
-    }
-
-    // Get all audios (for now, without complex filtering)
+    // Get all audios
     const allAudios = await db.select().from(audios);
 
     // Apply limit and offset

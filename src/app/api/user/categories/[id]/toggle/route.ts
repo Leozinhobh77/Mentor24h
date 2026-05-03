@@ -6,10 +6,11 @@ import { eq, and, isNull } from 'drizzle-orm';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const categoryId = parseInt(params.id, 10);
+    const { id } = await params;
+    const categoryId = parseInt(id, 10);
 
     if (isNaN(categoryId)) {
       return NextResponse.json(

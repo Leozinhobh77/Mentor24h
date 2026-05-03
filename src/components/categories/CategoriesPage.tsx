@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/lib/hooks/useAuth';
+import { CategoryCard } from './CategoryCard';
 
 interface Category {
   id: number;
@@ -95,8 +96,19 @@ export default function CategoriesPage() {
     }
   };
 
-  const handleToggle = async (categoryId: number, pillar: keyof GroupedCategories) => {
+  const handleToggle = useCallback(async (categoryId: number) => {
     if (!categories) return;
+
+    // Encontrar pillar dinamicamente (mais eficiente)
+    let pillar: keyof GroupedCategories | null = null;
+    for (const p of Object.keys(categories) as Array<keyof GroupedCategories>) {
+      if (categories[p].some((c) => c.id === categoryId)) {
+        pillar = p;
+        break;
+      }
+    }
+
+    if (!pillar) return;
 
     // Otimistic update
     const newCategories = { ...categories };
@@ -107,6 +119,7 @@ export default function CategoriesPage() {
     }
 
     setToggling(categoryId);
+    setError(null);
 
     try {
       const token = localStorage.getItem('auth_token');
@@ -125,7 +138,6 @@ export default function CategoriesPage() {
       const result = await response.json();
 
       if (!result.success) {
-        // Revert on error
         const revertCategories = { ...newCategories };
         if (catIndex >= 0) {
           revertCategories[pillar][catIndex].isSelected = !revertCategories[pillar][catIndex].isSelected;
@@ -136,7 +148,6 @@ export default function CategoriesPage() {
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Erro desconhecido';
       setError(message);
-      // Revert on error
       const revertCategories = { ...newCategories };
       if (catIndex >= 0) {
         revertCategories[pillar][catIndex].isSelected = !revertCategories[pillar][catIndex].isSelected;
@@ -145,7 +156,7 @@ export default function CategoriesPage() {
     } finally {
       setToggling(null);
     }
-  };
+  }, [categories]);
 
   if (authLoading || isLoading) {
     return (
@@ -193,29 +204,18 @@ export default function CategoriesPage() {
               </div>
             </div>
 
-            {/* Categories grid */}
+            {/* Categories grid — memoized cards para performance */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {cats.map((cat) => (
-                <button
+                <CategoryCard
                   key={cat.id}
-                  onClick={() => handleToggle(cat.id, pillar as keyof GroupedCategories)}
-                  disabled={toggling === cat.id}
-                  className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${
-                    cat.isSelected
-                      ? 'bg-purple-500/20 border-purple-500/50 text-white'
-                      : 'bg-slate-800/50 border-slate-700 text-gray-400 hover:border-slate-600 hover:bg-slate-800/70'
-                  } disabled:opacity-50`}
-                >
-                  <span className="text-2xl flex-shrink-0">{cat.icon || '📌'}</span>
-                  <span className="text-sm font-medium text-left flex-1">{cat.name}</span>
-                  <div className="flex-shrink-0">
-                    {toggling === cat.id ? (
-                      <div className="w-4 h-4 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin"></div>
-                    ) : cat.isSelected ? (
-                      <span className="text-purple-400 text-sm">✓</span>
-                    ) : null}
-                  </div>
-                </button>
+                  id={cat.id}
+                  title={cat.name}
+                  pilar={pillar as 'organization' | 'inspiration' | 'entertainment' | 'wellbeing'}
+                  isSelected={cat.isSelected}
+                  isLoading={toggling === cat.id}
+                  onToggle={handleToggle}
+                />
               ))}
             </div>
           </div>

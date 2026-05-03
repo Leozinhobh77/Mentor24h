@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getUserFromToken } from '@/lib/services/auth.service';
 import { PhoneVerificationService } from '@/lib/services/phone-verification.service';
-import { normalizePhoneNumber } from '@/lib/utils/phone.helpers';
+import { normalizePhone } from '@/lib/utils/phone.helpers';
 
 const verifyPhoneSchema = z.object({
   phoneNumber: z.string().min(10, 'Número de telefone inválido'),
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     const { phoneNumber: rawPhoneNumber } = validation.data;
 
     // Validate and normalize phone number
-    const normalizedPhone = normalizePhoneNumber(rawPhoneNumber);
+    const normalizedPhone = normalizePhone(rawPhoneNumber);
     if (!normalizedPhone) {
       return NextResponse.json(
         { success: false, error: 'Número de telefone inválido. Use formato: +55XXXXXXXXXX' },
