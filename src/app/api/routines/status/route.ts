@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { routines } from '@/lib/db/schema';
 import { getUserFromToken } from '@/lib/services/auth.service';
-import { eq, desc } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 export async function GET(request: NextRequest) {
   try {
@@ -27,75 +27,66 @@ export async function GET(request: NextRequest) {
 
     const userId = userResult.data.user.id;
 
-    // Get last execution of each routine type
-    const routineTypes = [
-      'weekly_summary',
-      'pattern_analysis',
-      'daily_wellbeing',
-    ];
-    const routineStatus = [];
+    // Get routines for user
+    const userRoutines = await db
+      .select()
+      .from(routines)
+      .where(eq(routines.userId, userId));
 
-    for (const type of routineTypes) {
-      const lastRun = await db
-        .select()
-        .from(routines)
-        .where(eq(routines.type, type as any))
-        .orderBy(desc(routines.executedAt))
-        .limit(1);
+    const displayNames: Record<string, string> = {
+      weekly: 'Resumo Semanal',
+      daily: 'Dica Diária de Bem-estar',
+      monthly: 'Análise Mensal',
+      yearly: 'Revisão Anual',
+    };
 
-      const lastExecution = lastRun[0]?.executedAt;
-      const lastResult = lastRun[0]?.lastResult
-        ? JSON.parse(lastRun[0].lastResult)
-        : null;
-
-      // Calculate next execution based on cron schedule
+    const routineStatus = userRoutines.map((routine) => {
       const now = new Date();
-      let nextExecution = new Date();
+      let nextExecution = routine.nextExecution || new Date();
 
-      switch (type) {
-        case 'weekly_summary':
-          // Monday 8am
-          nextExecution = new Date(now);
-          nextExecution.setDate(
-            nextExecution.getDate() +
-              ((1 - nextExecution.getDay() + 7) % 7)
-          );
-          nextExecution.setHours(8, 0, 0, 0);
-          break;
-        case 'pattern_analysis':
-          // Monday 2pm
-          nextExecution = new Date(now);
-          nextExecution.setDate(
-            nextExecution.getDate() +
-              ((1 - nextExecution.getDay() + 7) % 7)
-          );
-          nextExecution.setHours(14, 0, 0, 0);
-          break;
-        case 'daily_wellbeing':
-          // Daily 7pm
-          nextExecution = new Date(now);
-          nextExecution.setHours(19, 0, 0, 0);
-          if (nextExecution <= now) {
-            nextExecution.setDate(nextExecution.getDate() + 1);
-          }
-          break;
+      // Calculate next execution based on routine type if not already set
+      if (!routine.nextExecution) {
+        switch (routine.type) {
+          case 'weekly':
+            nextExecution = new Date(now);
+            nextExecution.setDate(
+              nextExecution.getDate() +
+                ((1 - nextExecution.getDay() + 7) % 7)
+            );
+            nextExecution.setHours(8, 0, 0, 0);
+            break;
+          case 'daily':
+            nextExecution = new Date(now);
+            nextExecution.setHours(19, 0, 0, 0);
+            if (nextExecution <= now) {
+              nextExecution.setDate(nextExecution.getDate() + 1);
+            }
+            break;
+          case 'monthly':
+            nextExecution = new Date(now);
+            nextExecution.setMonth(nextExecution.getMonth() + 1);
+            nextExecution.setDate(1);
+            nextExecution.setHours(8, 0, 0, 0);
+            break;
+          case 'yearly':
+            nextExecution = new Date(now);
+            nextExecution.setFullYear(nextExecution.getFullYear() + 1);
+            nextExecution.setMonth(0);
+            nextExecution.setDate(1);
+            nextExecution.setHours(8, 0, 0, 0);
+            break;
+        }
       }
 
-      const displayNames: Record<string, string> = {
-        weekly_summary: 'Resumo Semanal',
-        pattern_analysis: 'Análise de Padrões',
-        daily_wellbeing: 'Dica Diária de Bem-estar',
-      };
-
-      routineStatus.push({
-        name: displayNames[type],
-        type: type.replace('_', '-'),
-        enabled: true,
-        lastExecuted: lastExecution || null,
+      return {
+        id: routine.id,
+        name: displayNames[routine.type] || routine.name,
+        type: routine.type,
+        enabled: routine.enabled,
+        lastExecuted: routine.lastExecuted,
         nextExecution: nextExecution,
-        lastResult: lastResult,
-      });
-    }
+      };
+    });
 
     return NextResponse.json({
       success: true,

@@ -15,15 +15,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Trigger the pattern analysis routine
-    const result = await inngest.send({
+    await inngest.send({
       name: 'pattern-analysis/trigger',
       data: { triggeredAt: new Date() },
     });
 
     return NextResponse.json({
       success: true,
-      triggeredAt: new Date(),
-      eventId: result[0]?.ids?.[0],
+      triggeredAt: new Date().toISOString(),
     });
   } catch (error) {
     console.error('[PATTERN_ANALYSIS_TRIGGER ERROR]', error);

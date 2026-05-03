@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { DashboardNavbar } from '@/components/dashboard/DashboardNavbar';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { DashboardNavbar } from '@/components/DashboardNavbar';
 
 export const metadata: Metadata = {
   title: 'Rotinas | Mentor24h',

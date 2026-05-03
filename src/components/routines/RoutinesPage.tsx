@@ -1,21 +1,22 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAuth } from '@/hooks/useAuth';
-import { format } from 'date-fns';
+import { useAuth } from '@/lib/hooks/useAuth';
+import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 interface RoutineStatus {
+  id: number;
   name: string;
   type: string;
   enabled: boolean;
   lastExecuted: string | null;
   nextExecution: string;
-  lastResult: Record<string, any> | null;
+  lastResult?: Record<string, any> | null;
 }
 
 export function RoutinesPage() {
-  const { token } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [routines, setRoutines] = useState<RoutineStatus[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,11 +25,7 @@ export function RoutinesPage() {
     async function fetchRoutines() {
       try {
         setIsLoading(true);
-        const response = await fetch('/api/routines/status', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch('/api/routines/status');
 
         if (!response.ok) {
           throw new Error('Falha ao carregar rotinas');
@@ -44,10 +41,10 @@ export function RoutinesPage() {
       }
     }
 
-    if (token) {
+    if (isAuthenticated) {
       fetchRoutines();
     }
-  }, [token]);
+  }, [isAuthenticated]);
 
   const getRoutineIcon = (type: string): string => {
     switch (type) {
@@ -62,10 +59,22 @@ export function RoutinesPage() {
     }
   };
 
-  const formatDate = (date: string | null): string => {
+  const formatDate = (date: string | null | Date): string => {
     if (!date) return 'Nunca executada';
     try {
-      return format(new Date(date), 'dd/MM/yyyy HH:mm', { locale: ptBR });
+      const dateObj = typeof date === 'string' ? new Date(date) : date;
+      const now = new Date();
+      const diffMs = now.getTime() - dateObj.getTime();
+      const diffMins = Math.floor(diffMs / 60000);
+
+      if (diffMins < 1) return 'Agora mesmo';
+      if (diffMins < 60) return `${diffMins}min atrás`;
+
+      const diffHours = Math.floor(diffMins / 60);
+      if (diffHours < 24) return `${diffHours}h atrás`;
+
+      const diffDays = Math.floor(diffHours / 24);
+      return `${diffDays}d atrás`;
     } catch {
       return 'Data inválida';
     }

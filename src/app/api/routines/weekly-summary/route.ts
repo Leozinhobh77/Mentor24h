@@ -15,15 +15,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Trigger the weekly summary routine
-    const result = await inngest.send({
+    await inngest.send({
       name: 'weekly-summary/trigger',
       data: { triggeredAt: new Date() },
     });
 
     return NextResponse.json({
       success: true,
-      triggeredAt: new Date(),
-      eventId: result[0]?.ids?.[0],
+      triggeredAt: new Date().toISOString(),
     });
   } catch (error) {
     console.error('[WEEKLY_SUMMARY_TRIGGER ERROR]', error);

@@ -15,7 +15,10 @@
     "seed:audios": "ts-node src/scripts/seed-audios.ts",
     "inngest:dev": "npx inngest-cli@latest dev -u http://localhost:3000/api/inngest",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:load": "k6 run .k6/load-test.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.92.0",
@@ -42,6 +45,7 @@
     "zustand": "^4.4.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",

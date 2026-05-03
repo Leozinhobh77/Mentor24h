@@ -15,15 +15,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Trigger the daily wellbeing routine
-    const result = await inngest.send({
+    await inngest.send({
       name: 'daily-wellbeing/trigger',
       data: { triggeredAt: new Date() },
     });
 
     return NextResponse.json({
       success: true,
-      triggeredAt: new Date(),
-      eventId: result[0]?.ids?.[0],
+      triggeredAt: new Date().toISOString(),
     });
   } catch (error) {
     console.error('[DAILY_WELLBEING_TRIGGER ERROR]', error);

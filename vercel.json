@@ -1,4 +1,24 @@
 {
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm ci",
+
+  "env": [
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "DATABASE_URL",
+    "TWILIO_ACCOUNT_SID",
+    "TWILIO_AUTH_TOKEN",
+    "TWILIO_PHONE_NUMBER",
+    "CLAUDE_API_KEY",
+    "INNGEST_EVENT_KEY",
+    "INNGEST_SIGNING_KEY",
+    "INNGEST_API_KEY",
+    "NEXT_PUBLIC_APP_URL",
+    "NODE_ENV"
+  ],
+
   "crons": [
     {
       "path": "/api/routines/weekly-summary",
@@ -11,6 +31,42 @@
     {
       "path": "/api/routines/daily-wellbeing",
       "schedule": "0 19 * * *"
+    }
+  ],
+
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "http://localhost:3000/api/:path*"
+    }
+  ],
+
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/dashboard",
+      "statusCode": 307
+    }
+  ],
+
+  "headers": [
+    {
+      "source": "/api/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/static/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
     }
   ]
 }
